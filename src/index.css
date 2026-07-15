@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root,
+[data-theme="ocean"] {
+  --theme-from: #38bdf8;
+  --theme-to: #6366f1;
+  --theme-accent: #fbbf24;
+}
+
+[data-theme="sunset"] {
+  --theme-from: #fb923c;
+  --theme-to: #ef4444;
+  --theme-accent: #fde047;
+}
+
+[data-theme="candy"] {
+  --theme-from: #f472b6;
+  --theme-to: #c084fc;
+  --theme-accent: #67e8f9;
+}
+
+[data-theme="jungle"] {
+  --theme-from: #4ade80;
+  --theme-to: #16a34a;
+  --theme-accent: #fde047;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", "Baloo 2", system-ui, sans-serif;
+  background: linear-gradient(160deg, var(--theme-from), var(--theme-to));
+  min-height: 100svh;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-10px);
+  }
+  40%,
+  80% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.3s ease-out;
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+.animate-float-up {
+  animation: float-up 0.8s ease-out forwards;
+}
