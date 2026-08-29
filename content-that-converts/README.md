@@ -17,6 +17,7 @@ symptoms and their desired outcome._
 | [`02-deliverables-per-coach.md`](02-deliverables-per-coach.md) | 10 photos, B-roll, 5 reels, Original Story, crew/roles |
 | [`03-reel-content-strategy.md`](03-reel-content-strategy.md) | The recommended 5 reels + Original Story, the "widen the gap" through-line |
 | [`04-landing-page-notes.md`](04-landing-page-notes.md) | Edits to align the landing page with the real experience |
+| [`05-landing-page-copy.md`](05-landing-page-copy.md) | Full section-by-section sales-page copy with photo/video placeholders |
 | [`coaches/`](coaches/) | Per-coach worked breakdowns (offer diagnostic + Content Map + 5 reels + Original Story) |
 | [`coaches/01-relationship-couple.md`](coaches/01-relationship-couple.md) | Coach 01 — relationship couple; the "gauge for your relationship" offer |
 
