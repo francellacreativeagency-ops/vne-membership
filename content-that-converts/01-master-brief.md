@@ -49,9 +49,16 @@ actually help me? What would my life look like if I worked with you? Why you?_
 
 ### PHASE 1 — PREP · "Content Strategy Kickoff"
 **Monday, September 7 · Online · 60–75 min group Zoom**
-Not a "prep meeting" — the Kickoff. Coaches submit their offer, funnel, and business
-info **before** the call so Francis reviews funnels in advance. On the call we work
-through each coach's **Content Map**:
+Not a "prep meeting" — the Kickoff.
+
+> **✅ CRITICAL INTAKE REQUIREMENT:** Every coach must submit a **link to their offer /
+> landing page well ahead of Monday** (build it into booking — see below). Francis
+> reviews each one in advance so the Kickoff can sharpen: the **false belief**, the
+> **pain**, the **desire**, and whether the **offer itself is irresistible**. Reviewing
+> live on the call is too late — the pre-work is what makes the strategy land.
+
+Coaches submit their offer, funnel, and business info **before** the call so Francis
+reviews funnels in advance. On the call we work through each coach's **Content Map**:
 
 - My offer / I help… / The problem I solve / The transformation
 - My primary CTA
@@ -115,9 +122,25 @@ Pick an available block → submit information (offer, funnel, socials) → pay 
 receive prompts/prep info → Monday Kickoff → Saturday production. Guests
 (client for testimonial) must be declared in advance.
 
+## Back-end monetization (the real business)
+
+The intensive is the front door. The strategist work Francis does reviewing each
+offer/landing page ahead of Monday naturally surfaces the upsell:
+
+1. **Offer Architect** — refine/rebuild the offer itself so it's irresistible
+   (false belief → pain → desire → mechanism → irresistible offer).
+2. **Landing page build** — Francis builds the landing page for them, engineered
+   to convert, deploying the very content they created at the intensive.
+
+> Positioning: at the intensive they see the gaps in their own offer/funnel live.
+> That's the moment to offer "want me to actually build this for you?" The reviewed
+> landing-page link (intake) is both a prep tool **and** the upsell diagnostic.
+> **[TO DO: price/package Offer Architect + landing-page build as a back-end offer.]**
+
 ## Open items / decisions pending
-- [ ] Confirm final reel count & mix per coach (see `03-reel-content-strategy.md`)
-- [ ] Confirm Original Story length: 15-min interview block vs. 45-min recording
+- [x] Final reel count & mix per coach — locked (2 awareness / 2 engagement / 1 conversion)
+- [x] Original Story length — locked at 15 min per coach
+- [ ] Package + price the back-end upsell (Offer Architect + landing-page build)
 - [ ] Confirm crew roster (photographer, B-roll operator, reel team, interviewer)
 - [ ] Pricing note for the 10-photo brand package — _"Gabi, charge me for this one"_
       (flagged by Francis; needs a line item / cost)

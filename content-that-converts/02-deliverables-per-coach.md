@@ -66,10 +66,9 @@ Authority block and the reels get knocked out together.
 - Becomes the coach's **Original Story** video, combined with the framework —
   the emotional core of their content.
 - Paired with a **pinned post** that introduces the Original Story on their profile.
-- **[TO CONFIRM — timing conflict]** The note mentions both a ~45-minute recording
-  _and_ a ~15-minute block per coach (≈2 hrs total for 7, stretchable to 3).
-  Likely: ~15 min of usable interview per coach on the day, edited down; the
-  "45 minutes" may be the full framework/template length. Lock this Monday.
+- **✅ CONFIRMED:** each coach gets a **15-minute** founder/Original Story interview.
+  (≈2 hrs total for 7, can stretch to ~3 and still be fine.) The 45-min figure was
+  the full framework/template length, not per-coach recording time.
 
 ## 5. Optional — client/testimonial interview (7th video)
 

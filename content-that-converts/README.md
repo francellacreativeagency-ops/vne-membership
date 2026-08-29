@@ -24,7 +24,12 @@ symptoms and their desired outcome._
 ❤️ optional client testimonial (7th video, scheduled separately) · 📁 raw files ·
 🧠 a content deployment plan.
 
+## Locked
+- ✅ Reel mix: 2 awareness / 2 engagement / 1 conversion, all → offer
+- ✅ Original Story: 15-min founder interview per coach
+- ✅ Intake: coaches submit their offer/landing-page link **well before Monday** so
+  Francis pre-reviews (false belief · pain · desire · irresistible offer)
+
 ## Top open decisions
-- Final reel mix (recommendation locked in `03`: 2 awareness / 2 engagement / 1 conversion)
-- Original Story length: 15-min interview block vs. 45-min recording
+- Package + price the **back-end upsell**: Offer Architect + landing-page build
 - Crew roster + the 10-photo package price ("Gabi, charge me for this one")
