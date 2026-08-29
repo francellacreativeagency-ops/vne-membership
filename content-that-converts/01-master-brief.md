@@ -42,7 +42,9 @@ actually help me? What would my life look like if I worked with you? Why you?_
 | **Who it's for** | Online coaches, online business owners, and local coaches/business owners with an offer |
 | **The problem we solve** | They know they need content but don't have the environment, equipment, strategy, or time to create it |
 | **Capacity** | 7 seats (state the exact number publicly — concrete scarcity is stronger) |
-| **Price** | $297 founding-session rate (introductory; "founding cohort" honesty, no over-explaining) |
+| **Price** | **$297** founding rate — 80% off the $1,497 regular price ($1,200 off). First time Vine Studio has run this; price returns to $1,497 after results are in |
+| **Rooms** | 3 spaces: big room = photo studio (2 sets running) · podcast studio = reels + founder interviews · quiet room = prep between rotations |
+| **Same-day** | Files + photos handed off on the day; we teach basic editing inside IG/TikTok/FB and help schedule the first post before they leave |
 | **Scarcity** | First come, first served |
 
 ## The 3-phase system
@@ -90,10 +92,10 @@ piece promote? What CTA? Where does it go? What do I post first? What becomes an
 
 | Time | What's happening |
 |---|---|
-| 8:00–8:20 | Welcome + Production Brief — everyone gets their schedule |
-| 8:20–10:20 | **Production Block 1** — Photos + Reels + quiet content prep |
-| 10:20–12:20 | **Production Block 2** — Authority Conversation / Founder + client story interviews |
-| 12:20–1:00 | **Final Capture + Content Check** — pickups, extra shots, Deployment Plan |
+| 8:00–8:20 | Welcome + Production Brief — split into 2 groups, everyone gets their room |
+| 8:20–10:20 | **Rotation: Photo Studio ⇄ Reel Room** — Group A shoots (2 sets + BTS) while Group B records reels, then swap |
+| 10:20–12:00 | **Founder-Story Interviews** — 15 min each in the podcast studio |
+| 12:00–1:00 | **Footage, Files + First Post** — hand off photos/clips, basic editing inside IG/TikTok/FB, schedule the first post |
 
 _Publicly you can keep the times soft; this is how the room is actually run._
 

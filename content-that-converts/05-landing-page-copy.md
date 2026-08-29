@@ -147,13 +147,15 @@ These aren't random pieces. Each one has a job:
 
 ## SECTION 8 — HOW SATURDAY RUNS
 
-- **8:00–8:20** — Welcome + Production Brief. Everyone gets their schedule.
-- **8:20–10:20** — Production Block 1: photos + reels + quiet content prep.
-- **10:20–12:20** — Production Block 2: founder-story & client interviews.
-- **12:20–1:00** — Final Capture + Content Check: pickups, extra shots, deployment plan.
+- **8:00–8:20** — Welcome + Production Brief. Split into two groups; everyone gets their room.
+- **8:20–10:20** — Rotation: Group A in the photo studio (two sets + BTS clips) while Group B
+  records reels; then swap.
+- **10:20–12:00** — Founder-story interviews, 15 minutes each in the podcast studio.
+- **12:00–1:00** — Footage, files + your first post: same-day handoff, basic editing inside
+  Instagram/TikTok/Facebook, and we help you schedule your first post before you leave.
 
-You'll never be standing around. While one coach records, you're at the Content Prep
-Station refining scripts, building hooks, and prepping your CTA.
+You'll never be standing around. Between rotations you're in the quiet room refining
+scripts, building hooks, and prepping your CTA.
 
 ---
 
@@ -199,8 +201,10 @@ strategy · the production crew · the structure
 
 **There are no testimonials from this room yet.**
 
-This is the founding session. You'd be part of the first cohort — which is exactly why
-it's **$297** instead of what it'll cost once the results are on the wall.
+Why so low? This is the **first time** Vine Studio has ever opened this. You'd be part of
+the founding cohort — which is exactly why it's **$297** (that's **80% off** the regular
+**$1,497** — a $1,200 saving). Once the results are on the wall, the price returns to
+$1,497 and won't come back down.
 
 **Only 7 seats. First come, first served.**
 

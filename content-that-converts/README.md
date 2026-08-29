@@ -4,7 +4,7 @@ Working knowledge base for Francis's coaching content intensive. Saved so we can
 keep building on it as more details come in.
 
 **Event:** 5-Hour Content That Converts Intensive · 7 coaches · Sat Sept 12, 8 AM–1 PM
-· Vinestudio158 · $297 founding rate · Monday Sept 7 online Strategy Kickoff.
+· Vinestudio158 · **$297** founding rate (80% off $1,497) · Monday Sept 7 online Strategy Kickoff.
 
 **Goal:** not content for virality — **content that helps each coach's clients make
 micro-yeses**, all threaded with one message: _widen the gap between the client's
@@ -18,6 +18,7 @@ symptoms and their desired outcome._
 | [`03-reel-content-strategy.md`](03-reel-content-strategy.md) | The recommended 5 reels + Original Story, the "widen the gap" through-line |
 | [`04-landing-page-notes.md`](04-landing-page-notes.md) | Edits to align the landing page with the real experience |
 | [`05-landing-page-copy.md`](05-landing-page-copy.md) | Full section-by-section sales-page copy with photo/video placeholders |
+| [`06-film-scripts.md`](06-film-scripts.md) | Read-aloud VSL scripts for the hero + closing films |
 | [`coaches/`](coaches/) | Per-coach worked breakdowns (offer diagnostic + Content Map + 5 reels + Original Story) |
 | [`coaches/01-relationship-couple.md`](coaches/01-relationship-couple.md) | Coach 01 — relationship couple; the "gauge for your relationship" offer |
 | [`coaches/01-relationship-couple-scripts.md`](coaches/01-relationship-couple-scripts.md) | Coach 01 — teleprompter scripts for all 5 reels + the 15-min founder interview |
