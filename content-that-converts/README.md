@@ -20,6 +20,8 @@ symptoms and their desired outcome._
 | [`05-landing-page-copy.md`](05-landing-page-copy.md) | Full section-by-section sales-page copy with photo/video placeholders |
 | [`coaches/`](coaches/) | Per-coach worked breakdowns (offer diagnostic + Content Map + 5 reels + Original Story) |
 | [`coaches/01-relationship-couple.md`](coaches/01-relationship-couple.md) | Coach 01 — relationship couple; the "gauge for your relationship" offer |
+| [`coaches/01-relationship-couple-scripts.md`](coaches/01-relationship-couple-scripts.md) | Coach 01 — teleprompter scripts for all 5 reels + the 15-min founder interview |
+| `landing-page` (Artifact) | Visual sales page — published as a shareable Artifact (see chat for URL) |
 
 ## What each coach leaves with
 📸 10 brand photos · 🎬 5 reels (awareness/engagement/conversion, all → offer) ·
