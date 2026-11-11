@@ -857,15 +857,17 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
     }
     flushing=false;
     if(sent) loadTicks();
-    if(!queue.length&&live) setStatus('Live · synced with the crew','live');
+    if(!queue.length&&live&&readOk) setStatus('Live · synced with the crew','live');
   }
 
-  let loadSeq=0;
+  let loadSeq=0, readOk=false;
   async function loadTicks(){
     const seq=++loadSeq;
-    const {data,error}=await sb.from('ticks').select('id,done,who');
+    let data=null, error=null;
+    try{ ({data,error}=await sb.from('ticks').select('id,done,who')); }catch(err){ error=err; }
     if(seq!==loadSeq) return; // a newer load or a write happened meanwhile; don't overwrite with stale rows
-    if(error){ setStatus('Can\'t reach the crew checklist. Your ticks are saved here and will sync.','warn'); return; }
+    if(error||!Array.isArray(data)){ readOk=false; setStatus('Can\'t reach the crew checklist. Your ticks are saved here and will sync.','warn'); return; }
+    readOk=true;
     server={}; data.forEach(r=>{server[r.id]=r;}); rebuild();
   }
 
@@ -1012,7 +1014,7 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
       })
       .on('postgres_changes',{event:'*',schema:'public',table:'inspo'},()=>loadInspo())
       .subscribe(st=>{
-        if(st==='SUBSCRIBED'){ live=true; loadTicks().then(()=>{ if(!queue.length) setStatus('Live · synced with the crew','live'); flush(); }); loadInspo(); }
+        if(st==='SUBSCRIBED'){ live=true; loadTicks().then(()=>{ if(!queue.length&&readOk) setStatus('Live · synced with the crew','live'); flush(); }); loadInspo(); }
         else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ live=false; setStatus('Reconnecting… your ticks are saved here and will sync','warn'); }
       });
     window.addEventListener('online',()=>{flush(); loadTicks(); loadInspo();});
