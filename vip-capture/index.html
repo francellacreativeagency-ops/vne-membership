@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1F2E5A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="VIP Capture">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>html{-webkit-text-size-adjust:100%;color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img,video{max-width:100%}[hidden]{display:none!important}</style>
+<title>VIP Capture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: crew field guide for phones. Single column, sticky chips, the run of show as scene cards with roles, settings and tickable must-gets. Palette borrows the gala colours: purple and navy. */
+:root{
+  --bg:#F5F4F8; --surface:#FFFFFF; --ink:#141A2E; --muted:#5C6075; --line:#DEDCE7;
+  --purple:#5B2A86; --purple-soft:#EFE7F6; --navy:#1F2E5A; --navy-soft:#E5E9F4;
+  --gold:#94701F; --gold-soft:#F5EDDA; --rose:#9B2F4E; --rose-soft:#F8E6EC; --ok:#2A8A55;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C0F1E; --surface:#151A2E; --ink:#E9E8F1; --muted:#9EA1B6; --line:#2B3049;
+  --purple:#BE98E6; --purple-soft:#251C38; --navy:#93A9EA; --navy-soft:#1A2240;
+  --gold:#DDB863; --gold-soft:#2B2515; --rose:#EE93AE; --rose-soft:#33192A; --ok:#6FD49B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C0F1E; --surface:#151A2E; --ink:#E9E8F1; --muted:#9EA1B6; --line:#2B3049;
+  --purple:#BE98E6; --purple-soft:#251C38; --navy:#93A9EA; --navy-soft:#1A2240;
+  --gold:#DDB863; --gold-soft:#2B2515; --rose:#EE93AE; --rose-soft:#33192A; --ok:#6FD49B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);
+  padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:1.7rem;font-weight:700}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+.eyebrow{font:500 .72rem/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+.muted{color:var(--muted)}
+
+header.hero{padding-block:40px 24px;display:grid;gap:14px}
+header.hero h1{font-size:clamp(2.4rem,8.5vw,4.4rem);font-weight:800;letter-spacing:-.02em}
+header.hero h1 span{color:var(--purple)}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.fact{font:500 .76rem/1 var(--mono);padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.progress{display:grid;gap:6px;margin-top:6px}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--navy),var(--purple));transition:width .3s}
+.progress-row{display:flex;justify-content:space-between;gap:12px;font-size:.85rem;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+
+nav.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+  display:flex;gap:6px;overflow-x:auto;padding-block:10px;border-bottom:1px solid var(--line);scrollbar-width:none}
+nav.chips::-webkit-scrollbar{display:none}
+nav.chips a{flex:none;font-size:.82rem;font-weight:600;color:var(--ink);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+nav.chips a:hover,nav.chips a:focus-visible{border-color:var(--purple);color:var(--purple);outline:none}
+nav.chips a.gala{border-color:var(--purple);color:var(--purple)}
+
+section{padding-block:40px 8px;display:grid;gap:18px;scroll-margin-top:60px}
+section > .intro{display:grid;gap:8px;max-width:68ch}
+
+.arc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.arc div{padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:grid;gap:6px;min-width:0;align-content:start}
+.arc b{font-family:var(--display);font-size:1.15rem}
+.arc .tag{font:500 .7rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.arc div:nth-child(1) .tag{color:var(--gold)} .arc div:nth-child(2) .tag{color:var(--navy)} .arc div:nth-child(3) .tag{color:var(--purple)}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:.88rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .7rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.k,td.mono{font-family:var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.role{display:inline-block;font:500 .68rem/1 var(--mono);padding:4px 6px;border-radius:5px;margin:1px 3px 1px 0;white-space:nowrap;background:var(--navy-soft);color:var(--navy)}
+.role.L{background:var(--purple-soft);color:var(--purple)}
+.role.F{background:var(--gold-soft);color:var(--gold)}
+.role.S1,.role.S2{background:var(--navy-soft);color:var(--navy)}
+
+/* crew cards */
+.crew{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.crewcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:8px;align-content:start}
+.crewcard .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.crewcard ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.kit{font:500 .78rem/1.5 var(--mono);color:var(--muted)}
+
+/* checklist */
+.group{display:grid;gap:8px}
+.group > h3{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.group > h3 small{font:500 .75rem/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+ul.check{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+ul.check li{border-bottom:1px solid var(--line)}
+ul.check li:last-child{border-bottom:0}
+ul.check label{display:grid;grid-template-columns:22px 1fr;gap:12px;padding:11px 14px;cursor:pointer;align-items:start}
+ul.check input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--purple)}
+ul.check .t{min-width:0}
+ul.check .t b{font-weight:600}
+ul.check .t .n{display:block;color:var(--muted);font-size:.85rem;margin-top:2px}
+ul.check input:checked + .t b{text-decoration:line-through;color:var(--muted)}
+ul.check label:has(input:focus-visible){outline:2px solid var(--purple);outline-offset:-2px;border-radius:12px}
+
+/* scene cards */
+.daybar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.daybar h2 span{color:var(--purple)}
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid}
+.scene.key{border-color:var(--purple);box-shadow:0 0 0 1px var(--purple) inset}
+.scene .top{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;padding:16px 16px 12px;align-items:start}
+.scene .time{font:500 .95rem/1.3 var(--mono);color:var(--purple);font-variant-numeric:tabular-nums;white-space:nowrap}
+.scene .time small{display:block;color:var(--muted);font-size:.72rem}
+.scene .ttl{display:grid;gap:4px;min-width:0}
+.scene .loc{font:500 .7rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.flag{display:inline-block;font:500 .66rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:5px;background:var(--rose-soft);color:var(--rose);margin-left:6px;vertical-align:middle}
+.flag.must{background:var(--purple-soft);color:var(--purple)}
+.scene .jobs{display:grid;gap:6px;padding:0 16px 12px}
+.scene .job{display:grid;grid-template-columns:66px 1fr;gap:10px;font-size:.9rem}
+.scene .job > span:first-child{padding-top:2px}
+.settings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);background:color-mix(in srgb,var(--navy-soft) 55%,var(--surface))}
+.settings div{padding:10px 12px;border-right:1px solid var(--line);min-width:0}
+.settings div:last-child{border-right:0}
+.settings dt{font:500 .64rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.settings dd{margin:0;font:500 .8rem/1.4 var(--mono);overflow-wrap:anywhere}
+.scene ul.check{border:0;border-top:1px solid var(--line);border-radius:0}
+.scene .note2{padding:10px 16px;font-size:.85rem;border-top:1px solid var(--line);background:var(--rose-soft);color:var(--ink)}
+.scene .note2 b{color:var(--rose)}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{font:600 .85rem var(--body);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--purple);border-color:var(--purple);color:var(--bg)}
+.tabs button:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+
+.note{padding:14px 16px;border-radius:12px;background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);display:grid;gap:6px;max-width:76ch}
+.note strong{color:var(--gold)}
+.note.sacred{background:var(--purple-soft);border-color:color-mix(in srgb,var(--purple) 35%,transparent)}
+.note.sacred strong{color:var(--purple)}
+.note.warn{background:var(--rose-soft);border-color:color-mix(in srgb,var(--rose) 35%,transparent)}
+.note.warn strong{color:var(--rose)}
+.note ul{margin:0;padding-left:18px;display:grid;gap:3px}
+
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.preset{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:8px;align-content:start;min-width:0}
+.preset .c{font:800 1.4rem/1 var(--display);color:var(--purple)}
+.preset dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:.84rem}
+.preset dt{color:var(--muted)}
+.preset dd{margin:0;font-family:var(--mono);font-size:.8rem;overflow-wrap:anywhere}
+
+.qgrid,.reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qcard,.reel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start}
+.qcard .when{font:500 .7rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.qcard.gala .when{color:var(--purple)}
+.qcard.gentle .when{color:var(--rose)}
+.qcard ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.qcard .target{font:500 .75rem/1.3 var(--mono);color:var(--muted)}
+.reel .len{font:500 .72rem/1 var(--mono);color:var(--gold)}
+
+code{font-family:var(--mono);font-size:.82em;background:var(--purple-soft);color:var(--purple);padding:2px 6px;border-radius:5px;overflow-wrap:anywhere}
+.segments{display:flex;flex-wrap:wrap;gap:6px}
+footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
+.confirm{display:inline-flex;gap:8px;align-items:center;font-size:.85rem}
+.confirm button{font:600 .8rem var(--body);padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.confirm button.danger{border-color:var(--rose);color:var(--rose)}
+
+@media (max-width:680px){
+  .arc,.qgrid,.reels,.crew,.presets{grid-template-columns:1fr}
+  .settings{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .settings div:nth-child(2){border-right:0}
+  .settings div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  h2{font-size:1.45rem}
+  .scene .top{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* sync + inspo */
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
+.sync::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.sync[data-state="live"]::before{background:var(--ok)}
+.sync[data-state="warn"]::before{background:var(--rose)}
+.sync[data-state="local"]::before{background:var(--gold)}
+.by{font:500 .68rem/1 var(--mono);color:var(--muted);margin-left:6px;white-space:nowrap}
+.inspoform{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.inspoform .full{grid-column:1/-1}
+.inspoform label.f{display:grid;gap:5px;font:500 .7rem/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-width:0}
+.inspoform input[type=text],.inspoform input[type=url],.inspoform select,.inspoform textarea{font:400 .95rem/1.4 var(--body);letter-spacing:normal;text-transform:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0}
+.inspoform input[type=file]{font:400 .85rem var(--body);text-transform:none;letter-spacing:normal;color:var(--ink);max-width:100%}
+.inspoform :is(input,select,textarea):focus-visible{outline:2px solid var(--purple);outline-offset:1px}
+.inspoform .hint{font:400 .78rem/1.4 var(--body);text-transform:none;letter-spacing:normal;color:var(--muted)}
+.kindpick{display:flex;gap:6px;flex-wrap:wrap}
+.kindpick label{cursor:pointer}
+.kindpick input{position:absolute;opacity:0;pointer-events:none}
+.kindpick span{display:inline-block;font:600 .85rem var(--body);padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.kindpick input:checked + span{background:var(--purple);border-color:var(--purple);color:var(--bg)}
+.kindpick input:focus-visible + span{outline:2px solid var(--purple);outline-offset:2px}
+.formrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn{font:600 .9rem var(--body);padding:10px 18px;border-radius:10px;border:1px solid var(--purple);background:var(--purple);color:var(--bg);cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line);padding:6px 12px;font-size:.8rem}
+.btn.ghost.on{border-color:var(--ok);color:var(--ok)}
+.btn.ghost.danger{color:var(--rose)}
+.btn:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.inspogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.icard{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;align-content:start}
+.icard .media{width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--navy-soft);display:block;max-width:100%}
+.icard .linkonly{aspect-ratio:4/5;max-width:100%;display:grid;place-content:center;gap:6px;text-align:center;padding:16px;background:linear-gradient(160deg,var(--navy-soft),var(--purple-soft));color:var(--ink);text-decoration:none}
+.icard .linkonly b{font:700 1.1rem var(--display)}
+.icard .linkonly span{font:500 .75rem var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.icard .body{padding:12px 14px;display:grid;gap:6px;min-width:0}
+.icard .tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag2{font:500 .66rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:5px;background:var(--navy-soft);color:var(--navy)}
+.tag2.reel{background:var(--gold-soft);color:var(--gold)}
+.tag2.shot{background:var(--purple-soft);color:var(--purple)}
+.tag2.done{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.icard h3{font-size:1rem;overflow-wrap:anywhere}
+.icard p{font-size:.86rem;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.icard .ref{font-size:.84rem;color:var(--purple);overflow-wrap:anywhere}
+.icard .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-top:4px}
+.icard .who2{font:500 .72rem var(--mono);color:var(--muted)}
+.icard .acts{display:flex;gap:6px;flex-wrap:wrap}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px;grid-column:1/-1}
+@media (max-width:860px){.inspogrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.inspogrid,.inspoform{grid-template-columns:1fr}}
+
+/* app additions */
+.whoami{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem}
+.whoami select,.whoami input{font:500 .9rem var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.whoami select:focus-visible,.whoami input:focus-visible{outline:2px solid var(--purple);outline-offset:1px}
+.whoami.need select{border-color:var(--rose)}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">Vine Studio 158 · Crew field guide · Thursday 12 November</p>
+  <h1>AskDoctorFaith <span>VIP</span></h1>
+  <p class="muted" style="max-width:62ch">The day session and the evening gala, scene by scene: who shoots what, which lens, which settings and Kelvin, and the shots we must get. Tick them off as you go: ticks sync live across the whole crew, with the name of whoever ticked.</p>
+  <div class="facts">
+    <span class="fact">Imperial Ballroom</span><span class="fact">About 300 guests (est.)</span><span class="fact">Day 07:30–18:00</span><span class="fact">Gala 17:30–21:30</span><span class="fact">Dr. Faith's 45th</span><span class="fact">Purple &amp; navy</span><span class="fact">IG · FB · YouTube</span>
+  </div>
+  <div class="progress">
+    <div class="progress-row"><span id="progText">0 of 0 captured</span><span class="sync" id="syncStatus" data-state="local">Connecting…</span></div>
+    <div class="bar"><i id="progBar"></i></div>
+  </div>
+  <div class="whoami" id="whoWrap"><label for="whoSel">You are</label><select id="whoSel"><option value="">Choose your name…</option><option>Francis</option><option>Annie</option><option>Support 1</option><option>Support 2</option><option value="__other">Someone else…</option></select><input id="whoOther" type="text" maxlength="24" placeholder="Your name" hidden autocomplete="off"></div>
+</header>
+
+<nav class="chips" aria-label="Sections">
+  <a href="#story">Story</a><a href="#crew">Crew &amp; kit</a><a href="#settings">Settings</a><a href="#kelvin">Kelvin</a><a href="#day">Day session</a><a href="#gala" class="gala">Gala</a><a href="#editorial" class="gala">Editorial 6:30</a><a href="#speakers">Speakers</a><a href="#sacred">Worship &amp; prayer</a><a href="#questions">Questions</a><a href="#reels">Reels</a><a href="#inspo" class="gala">Inspo board</a><a href="#uploads">Uploads</a><a href="#wrap">Wrap</a>
+</nav>
+
+<!-- STORY -->
+<section id="story">
+  <div class="intro">
+    <p class="eyebrow">What we're selling</p>
+    <h2>One story, from expectation to celebration</h2>
+    <p class="muted">Every frame should make someone watching on Instagram feel they missed something they can't get anywhere else, and book for next year.</p>
+  </div>
+  <div class="arc">
+    <div><span class="tag">Morning</span><b>Expectation</b><p class="muted">Registration, vendor mall, doors opening, “what are you believing for today?”</p></div>
+    <div><span class="tag">Day</span><b>Encounter</b><p class="muted">Worship, teaching, notes, tears, hands raised, real questions, presbytery. A room that is being changed.</p></div>
+    <div><span class="tag">Night</span><b>Celebration</b><p class="muted">Purple and navy, red carpet, 20 years of Pioneers, Dr. Faith's 45th, cake, dance floor, prayer.</p></div>
+  </div>
+  <div class="note"><strong>House rules for a premium look</strong>
+    <ul>
+      <li><b>Expose for faces, protect highlights.</b> Stage spots will blow skin first. Highlight alert on.</li>
+      <li><b>Shoot through something.</b> Layer foreground blur (shoulders, candles, florals) for depth. That's what separates premium from snapshots.</li>
+      <li><b>Clean frames.</b> Move one step to lose exit signs, cables, AV cases and water bottles.</li>
+      <li><b>Wide every 20 minutes.</b> A full room is the best advert we have.</li>
+      <li><b>Pair every speaker shot with a reaction</b> from the same moment.</li>
+      <li><b>Video: shoot horizontal 4K with the subject centred.</b> You can crop a full 9:16 reel from it later, so one clip serves YouTube and IG. Turn the gimbal vertical only for hero reel moments.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CREW -->
+<section id="crew">
+  <div class="intro">
+    <p class="eyebrow">Two shooters, two support</p>
+    <h2>Crew &amp; kit</h2>
+  </div>
+  <div class="crew">
+    <div class="crewcard"><div class="who"><span class="role L">FRANCIS</span><h3>Francis (lead): stage, story &amp; reels</h3></div>
+      <p class="kit">R6 Mark II · RF 70-200 f/2.8 · RF 28-70 · gimbal · RF 85 f/2 for editorial</p>
+      <ul><li>Speakers, worship leader, panel, every stage moment</li><li>Big wides and the room hero shots</li><li>Gimbal reels and slow motion (the R6 II has the best video)</li><li>Leads the 6:30 editorial with Dr. Faith</li></ul></div>
+    <div class="crewcard"><div class="who"><span class="role F">ANNIE</span><h3>Moments, emotion &amp; crowd</h3></div>
+      <p class="kit">Second R body · RF 85 f/2 · RF 35 f/1.8 (hand the 85 to Francis for the editorial)</p>
+      <ul><li>Notes, hands raised, questions, tears, laughter</li><li>Prayer, worship faces, presbytery (from a distance)</li><li>Reaction pairs to every speaker</li><li>Gala: locked on Dr. Faith's reactions during speeches</li></ul></div>
+    <div class="crewcard"><div class="who"><span class="role S1">S1</span><h3>Support 1: interviews &amp; Stories</h3></div>
+      <p class="kit">Phone (4K, vertical) · lav mic · release QR · notes app</p>
+      <ul><li>Testimonials and birthday messages</li><li>Writes down quote timestamps during sessions</li><li>Posts same-day Stories from selects</li><li>Collects names at the red carpet for tagging</li></ul></div>
+    <div class="crewcard"><div class="who"><span class="role S2">S2</span><h3>Support 2: gear, light &amp; timelapse</h3></div>
+      <p class="kit">Tripod · phone or spare body for timelapse · LED wand / reflector · batteries · card wallet · power bank</p>
+      <ul><li>Card offloads and double backup at lunch and the flip</li><li>Room-flip timelapse 15:05–18:05</li><li>Holds light and reflector at editorial, fixes hair and dress</li><li>Phone BTS vertical</li></ul></div>
+  </div>
+  <div class="note warn"><strong>Ask the AV vendor at crew call</strong>
+    <p>With only two shooters, nobody can babysit a locked-off camera all day. Ask the AV vendor for a <b>recording of each session plus a clean audio feed from the desk</b>. That's your YouTube long form. If they can't, S2 runs a phone or spare body on a tripod at the back for the Dr. Faith sessions and the Money &amp; Marriage Q&amp;A.</p>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings">
+  <div class="intro">
+    <p class="eyebrow">Load these before 07:00</p>
+    <h2>Camera settings &amp; custom modes</h2>
+    <p class="muted">The R6 II has three custom slots on the mode dial (C1, C2, C3). Set them like this and you can switch from stills to normal video to slow motion with one turn.</p>
+  </div>
+  <div class="presets">
+    <div class="preset"><span class="c">C1</span><h3>Photo: stage</h3><dl>
+      <dt>Mode</dt><dd>M + Auto ISO (max 12800)</dd>
+      <dt>Shutter</dt><dd>1/250 (1/320 on gestures)</dd>
+      <dt>Aperture</dt><dd>f/2.8</dd>
+      <dt>AF</dt><dd>Servo · Eye detect: people · whole-area tracking</dd>
+      <dt>Drive</dt><dd>H · electronic 1st curtain</dd>
+      <dt>Metering</dt><dd>Evaluative, EC −1/3 under spots</dd>
+      <dt>File</dt><dd>RAW + small JPEG (fast phone transfer for Stories), both cards</dd>
+      <dt>Extras</dt><dd>HF anti-flicker on · highlight alert on</dd></dl></div>
+    <div class="preset"><span class="c">C2</span><h3>Video: regular</h3><dl>
+      <dt>Format</dt><dd>4K UHD 23.98p, full width, 10-bit</dd>
+      <dt>Shutter</dt><dd>1/50. Use 1/60 if lights flicker (US mains)</dd>
+      <dt>Profile</dt><dd>Canon Log 3 for hero/YouTube, ISO 800 or higher</dd>
+      <dt>Fast reels</dt><dd>Picture style Neutral, contrast −1 (no grading needed)</dd>
+      <dt>WB</dt><dd>Kelvin, locked. Never auto.</dd>
+      <dt>AF</dt><dd>Movie Servo · face/eye detect</dd>
+      <dt>Assist</dt><dd>Zebras 95% · View Assist on in Log</dd></dl></div>
+    <div class="preset"><span class="c">C3</span><h3>Video: slow motion</h3><dl>
+      <dt>Main</dt><dd>4K 59.94p · 1/120 → 2.5× slow on a 24p timeline</dd>
+      <dt>Extra slow</dt><dd>FHD 179.82p (high frame rate) · 1/360, no sound. Bright stage light only.</dd>
+      <dt>Use for</dt><dd>Worship, hands raised, cake candles, hugs, dance floor, gimbal push-ins</dd>
+      <dt>Gimbal</dt><dd>R6 II + 28-70 at 28mm. Balance at 06:45.</dd>
+      <dt>Note</dt><dd>If 180p flickers, it's the lights. Drop to 4K60.</dd></dl></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Lens</th><th>Who</th><th>Use it for</th><th>Sweet spot</th></tr></thead>
+    <tbody>
+      <tr><td><b>RF 70-200 f/2.8</b></td><td><span class="role L">FRANCIS</span></td><td>Speakers, worship leader, Dr. Faith's reactions from across the room, private moments without intruding</td><td class="mono">f/2.8 · 1/250+</td></tr>
+      <tr><td><b>RF 28-70</b></td><td><span class="role L">FRANCIS</span></td><td>Room wides, panel, red carpet full length and groups, gimbal</td><td class="mono">f/2.8–4 · 1/125</td></tr>
+      <tr><td><b>RF 85 f/2</b></td><td><span class="role F">ANNIE</span> → <span class="role L">FRANCIS</span> at 18:30</td><td>Emotion close-ups, editorial portraits, food, cake, details with creamy background</td><td class="mono">f/2–2.5 · 1/200</td></tr>
+      <tr><td><b>RF 35 f/1.8</b></td><td><span class="role F">ANNIE</span></td><td>Note-taking, tables, hands, dinner, dance floor, environmental shots in low light</td><td class="mono">f/1.8–2.2 · 1/160</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>Before doors</strong>
+    <ul>
+      <li><b>Sync the clocks on both bodies to the minute.</b> It lets you merge and sort both cards by time later.</li>
+      <li>Format cards. Record RAW to both slots on the R6 II.</li>
+      <li>Grey card under the stage lights at the lectern, then set custom WB or note the Kelvin it reads.</li>
+      <li>Battery count: at least 4 per body. The flip at 15:05 is your charging window.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- KELVIN -->
+<section id="kelvin">
+  <div class="intro">
+    <p class="eyebrow">White balance</p>
+    <h2>Kelvin by scene</h2>
+    <p class="muted">These are starting points. Hotel ballrooms vary, so confirm with a grey card at crew call and again at the 17:30 sound check. Use the same Kelvin on both bodies in each scene so photos and clips match.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Scene</th><th>Kelvin</th><th>Tint</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Prefunction: registration, vendor mall, presbytery</td><td class="k">3600–3900K</td><td class="k">0</td><td>Warm hotel overheads. Go to 5200K if you're by daylight windows.</td></tr>
+      <tr><td>Ballroom house lights (sessions, lunch)</td><td class="k">3500–3800K</td><td class="k">0</td><td>Warm and clean skin.</td></tr>
+      <tr><td>Speaker under stage spot</td><td class="k">4300–5200K</td><td class="k">0 to +2 G</td><td>Stage LEDs often run cooler than the house lights. White-balance for the speaker's face, not the room.</td></tr>
+      <tr><td>Day worship (coloured stage light)</td><td class="k">4000–4500K</td><td class="k">0</td><td>Keep the colour of the lights. Don't neutralise the mood.</td></tr>
+      <tr><td>Lunch food</td><td class="k">3600K</td><td class="k">0</td><td>A touch warm reads appetising.</td></tr>
+      <tr><td>Gala room: purple &amp; navy uplighting</td><td class="k">4000–4300K</td><td class="k">+2 to +4 G</td><td>Keeps the purple rich. Add green tint if faces go magenta. Auto WB will flatten the purple.</td></tr>
+      <tr><td>Red carpet with bare flash</td><td class="k">5500K</td><td class="k">0</td><td>Flash is daylight-balanced. Background will go warm or purple, which looks premium.</td></tr>
+      <tr><td>Red carpet with 1/4 CTO gel on flash</td><td class="k">4300K</td><td class="k">0</td><td>Blends the flash with the warm room for a more natural, luxe look.</td></tr>
+      <tr><td>Red carpet with LED panel</td><td class="k">Match panel (often 5600K)</td><td class="k">0</td><td>Set the panel and camera to the same number.</td></tr>
+      <tr><td>Birthday candles &amp; cake</td><td class="k">3200–3400K</td><td class="k">0</td><td>Candlelight on faces stays golden without going orange.</td></tr>
+      <tr><td>Night worship &amp; dance floor</td><td class="k">4000–4300K</td><td class="k">+2 G</td><td>Same as the gala room, so the night grades as one look.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- DAY -->
+<section id="day">
+  <div class="daybar"><h2>Day session</h2><span class="eyebrow">AskDoctorFaith VIP Day · Thu 12 Nov</span></div>
+  <div id="dayScenes" style="display:grid;gap:14px"></div>
+</section>
+
+<!-- GALA -->
+<section id="gala">
+  <div class="daybar"><h2>Night session: <span>Time to Celebrate</span></h2><span class="eyebrow">Presence &amp; prayer night · purple &amp; navy</span></div>
+  <div class="note warn"><strong>Times to confirm with the planner</strong>
+    <ul>
+      <li>Live worship (7:45, 30 min) runs into the speeches at 8:00.</li>
+      <li>Dance floor (8:42, 60 min) runs past closing remarks at 9:20.</li>
+      <li>Closing remarks (9:20, 20 min) runs past the final song at 9:25.</li>
+    </ul>
+  </div>
+  <div id="galaScenes" style="display:grid;gap:14px"></div>
+</section>
+
+<!-- EDITORIAL -->
+<section id="editorial">
+  <div class="intro">
+    <p class="eyebrow">18:30–19:00 · Prefunction</p>
+    <h2>Red carpet editorial</h2>
+    <p class="muted">These are the photos for Dr. Faith's birthday post, and probably the next event poster. Ask her for <b>10 minutes alone at 18:20</b>, before the guest line opens.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Setup</th><th>Settings</th></tr></thead>
+    <tbody>
+      <tr><td><b>Ambient only</b> (purple-lit backdrop)</td><td class="mono">85 f/2–2.5 · 1/200 · ISO 1600–3200 · 4000K +3 G</td></tr>
+      <tr><td><b>With a speedlight</b> (bounced, or off-camera held by S2 at 45° and a little higher than her face)</td><td class="mono">f/2.8 · 1/200 · ISO 800 · flash 1/4 CTO · 4300K. Ambient keeps the background purple.</td></tr>
+      <tr><td><b>With an LED wand or panel</b> (S2, at 45°)</td><td class="mono">f/2.2 · 1/200 · ISO 1600 · camera Kelvin = panel Kelvin</td></tr>
+      <tr><td><b>Groups of 3 or more</b></td><td class="mono">28-70 at 50mm · f/4 so both rows are sharp · 1/200</td></tr>
+    </tbody>
+  </table></div>
+  <div id="editorialList"></div>
+  <div class="note"><strong>Posing for a premium look</strong>
+    <ul>
+      <li>Shoulders angled 45°, weight on the back foot, chin slightly forward and down.</li>
+      <li>Full length: camera at hip height, which makes her taller and more elegant. Close-ups: camera just above eye level.</li>
+      <li>Give her something to do: walk toward you, adjust an earring, look back over her shoulder.</li>
+      <li>Get the real smile by making her laugh (S2 can help). The second frame after the laugh is usually the one.</li>
+      <li>Guests: one posed frame looking at camera, one candid laugh, done in 20 seconds. S1 notes names against shot numbers.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SPEAKERS -->
+<section id="speakers">
+  <div class="intro">
+    <p class="eyebrow">Must-haves for every person on stage</p>
+    <h2>Speaker checklist</h2>
+    <p class="muted">Dr. Faith appears five times today. Use her tab across all of them.</p>
+  </div>
+  <div class="tabs" role="tablist" id="spkTabs"></div>
+  <div id="spkLists"></div>
+</section>
+
+<!-- SACRED -->
+<section id="sacred">
+  <div class="intro">
+    <p class="eyebrow">Handle with care</p>
+    <h2>Worship, prayer &amp; presbytery</h2>
+  </div>
+  <div class="note sacred"><strong>Etiquette</strong>
+    <ul>
+      <li>No flash. Silent shutter (electronic) during prayer. If you see banding from the LEDs, switch back to mechanical and shoot between quiet moments.</li>
+      <li>Shoot from the edges, back and balcony. Never walk down the centre aisle or stand between the minister and the person being prayed for.</li>
+      <li>Use the 70-200 and the 85 so you can stay back. Hands and silhouettes are beautiful and keep people private.</li>
+      <li><b>Presbytery:</b> confirm with Dr. Faith or the organiser that photos are welcome. Shoot visuals only, never record the audio of a personal word. Stop if anyone waves you off.</li>
+      <li><b>Music rights:</b> most worship songs are copyrighted. Record it, but plan licensed or ambient audio for IG and YouTube unless the team owns the song.</li>
+    </ul>
+  </div>
+  <div id="sacredList"></div>
+</section>
+
+<!-- QUESTIONS -->
+<section id="questions">
+  <div class="intro">
+    <p class="eyebrow">For S1, with phone and lav</p>
+    <h2>Testimonial questions</h2>
+    <p class="muted">Ask 2–3 per person. Ask them to repeat the question in their answer (“Today I came because…”). Get first name, city and what they do, and consent before filming.</p>
+  </div>
+  <div class="qgrid" id="qGrid"></div>
+</section>
+
+<!-- REELS -->
+<section id="reels">
+  <div class="intro">
+    <p class="eyebrow">Plan the edit before you shoot</p>
+    <h2>Reels &amp; long form</h2>
+  </div>
+  <div class="reels" id="reelGrid"></div>
+  <div id="ytList"></div>
+</section>
+
+<!-- INSPO -->
+<section id="inspo">
+  <div class="intro">
+    <p class="eyebrow">Shared with the crew</p>
+    <h2>Inspo board</h2>
+    <p class="muted">Shots and reels to try. Add a photo or video, or paste an Instagram, TikTok or YouTube link, say how to get it, and mark it tried on the day.</p>
+  </div>
+  <form class="inspoform" id="inspoForm" novalidate>
+    <div class="full kindpick" role="radiogroup" aria-label="Type">
+      <label><input type="radio" name="inKind" id="inKindShot" value="shot" checked><span>Shot</span></label>
+      <label><input type="radio" name="inKind" id="inKindReel" value="reel"><span>Reel</span></label>
+    </div>
+    <label class="f full">Title<input type="text" id="inTitle" maxlength="80" placeholder="e.g. Hands raised against purple stage light" autocomplete="off"></label>
+    <label class="f">Scene<select id="inScene"></select></label>
+    <label class="f">Link (optional)<input type="url" id="inLink" placeholder="https://www.instagram.com/reel/…" autocomplete="off"></label>
+    <label class="f full">How to get it<textarea id="inNote" rows="2" maxlength="400" placeholder="Lens, angle, settings, timing, who shoots it"></textarea></label>
+    <label class="f full" id="inFileWrap">Photo or video (optional)<input type="file" id="inFile" accept="image/*,video/mp4,video/webm,video/quicktime"><span class="hint">Photos or videos up to 50 MB. iPhone videos play on iPhones; for Android viewers use MP4.</span></label>
+    <div class="full formrow"><button class="btn" type="submit" id="inSubmit">Add to board</button><span class="muted" id="inMsg" role="status"></span></div>
+  </form>
+  <div class="tabs" role="tablist" id="inspoFilter"></div>
+  <div class="inspogrid" id="inspoGrid"><div class="empty">Loading the board…</div></div>
+</section>
+
+<!-- UPLOADS -->
+<section id="uploads">
+  <div class="intro">
+    <p class="eyebrow">Ready for the app</p>
+    <h2>Upload segments &amp; posting plan</h2>
+    <p class="muted">Name files <code>VIP_[SEGMENT]_[FR/AN/S1/S2]_[number]</code>, for example <code>VIP_GALA-CAKE_FR_0142.jpg</code>.</p>
+  </div>
+  <div class="segments" id="segList"></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>When</th><th>What goes out</th><th>Who</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">12:15</td><td>Story: worship + Dr. Faith session 1, 5–8 frames and 2 clips</td><td><span class="role S1">S1</span></td></tr>
+      <tr><td class="mono">15:30</td><td>Story: “VIP Day” recap, plus the start of the room flip</td><td><span class="role S1">S1</span></td></tr>
+      <tr><td class="mono">19:15</td><td>Story teaser: 2–3 editorial frames of Dr. Faith (straight from the small JPEGs)</td><td><span class="role L">FRANCIS</span><span class="role S1">S1</span></td></tr>
+      <tr><td class="mono">Next morning</td><td>Birthday post for Dr. Faith: editorial hero carousel</td><td><span class="role L">FRANCIS</span></td></tr>
+      <tr><td class="mono">Within 48 h</td><td>Day recap reel, gala recap reel, birthday-messages reel</td><td>Edit</td></tr>
+      <tr><td class="mono">Within 2 weeks</td><td>YouTube: day recap film, gala film, full sessions</td><td>Edit</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- WRAP -->
+<section id="wrap">
+  <div class="intro"><p class="eyebrow">Before anyone leaves</p><h2>End-of-night checklist</h2></div>
+  <div id="wrapList"></div>
+</section>
+
+<footer>Vine Studio 158 · AskDoctorFaith VIP crew guide · Checklist and inspo board sync live for everyone using this app.</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+</body>
+</html>
+<script src="config.js"></script>
+</body>
+</html>
+<script>
+(function(){
+  const KEY='vip-adf-v2';
+  let state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}};
+  let ticks={}; Object.keys(state).forEach(k=>{if(state[k]) ticks[k]={by:null};});
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const ROLE={L:'FRANCIS',F:'ANNIE',S1:'S1',S2:'S2',ALL:'ALL'};
+  const chip=r=>`<span class="role ${r}">${ROLE[r]||r}</span>`;
+  const ALL=[];
+
+  // items: [who, text, note?]
+  function checklist(prefix,items,register=true){
+    return `<ul class="check">${items.map((it,i)=>{
+      const id=`${prefix}-${i}`; if(register) ALL.push(id);
+      const who=(it[0]||'').split(' ').filter(Boolean).map(chip).join('');
+      return `<li><label><input type="checkbox" data-id="${id}" ${ticks[id]?'checked':''}><span class="t">${who} <b>${esc(it[1])}</b><span class="by" data-by="${id}"></span>${it[2]?`<span class="n">${esc(it[2])}</span>`:''}</span></label></li>`;}).join('')}</ul>`;
+  }
+  function group(prefix,title,items,register=true){
+    return `<div class="group" data-prefix="${prefix}"><h3>${esc(title)} <small data-count="${prefix}"></small></h3>${checklist(prefix,items,register)}</div>`;
+  }
+
+  /* ---------------- SCENES ---------------- */
+  const DAY=[
+    {id:'d0',t:'06:45',m:'Crew call',title:'Gear, light check & prayer',loc:'Imperial Ballroom',
+     jobs:{L:'Balance gimbal. Grey-card WB at the lectern under show lights. Load C1–C3.',F:'Walk the room: find the angles for the back, sides and balcony. Clean lenses.',S1:'Set up the testimonial corner (clean background, quiet). Print or open the release QR.',S2:'Charge station, card wallet, tripod position for the AV backup and the timelapse.'},
+     set:['—','—','—','Measure'],
+     shots:[['L F','Sync both camera clocks to the minute'],['ALL','Format cards, battery count (4 per body)'],['L','Ask AV for session recordings + desk audio feed'],['L','Confirm with organiser: presbytery photos OK? Flash OK at red carpet?'],['S1','Get the speaker list and VIP faces (who must be photographed)'],['ALL','Crew prayer huddle']]},
+    {id:'d1',t:'07:30',e:'09:00',title:'Registration & vendor mall',loc:'Prefunction area',
+     jobs:{L:'Empty ballroom with the logo loop on screen and the stage dark: the mood opener. Then hero product shots at the ADF, ELON and speaker tables.',F:'Guests arriving: registration smiles, badge handoffs, hugs and reunions.',S1:'Arrival interviews (expectations). Target 8.',S2:'Phone BTS of the registration team. Back-of-room tripod set.'},
+     set:['28-70 · 85 · 35','f/2.8–4 · 1/160 · Auto ISO','C2 4K24','3600–3900K'],
+     shots:[['L','Empty ballroom wide, logo loop glowing, stage dark','From the back, centred. Tripod, f/5.6, 1/30.'],['L','ADF table product hero shots','85 f/2, clean background, one product sharp'],['L','ELON + speaker tables, wide and detail'],['F','Registration line wide (shows demand)'],['F','Badge handoff close-up, hands + smile'],['F','Hugs and reunions'],['F','Guests buying at vendor tables'],['S1','8 arrival testimonials']]},
+    {id:'d2',t:'08:15',e:'08:55',title:'Doors open, check-in & music',loc:'Prefunction → Ballroom',
+     jobs:{L:'From inside the ballroom shooting toward the doors as guests stream in. Gimbal walk-in from the door to the stage.',F:'First seats: Bibles, notebooks and pens laid out, people greeting.',S2:'BTS of the AV desk and the online platform screen.'},
+     set:['28-70 · 35 · gimbal','f/2.8 · 1/200','C3 4K60 walk-in','3500–3800K'],
+     shots:[['L','Doors opening, guests streaming in (from inside)'],['L','Gimbal walk-in, door to stage','C3 slow motion. Reel opener.'],['F','Tables: Bible, notebook, pen, coffee','35 f/2, details that say “we came to learn”'],['F','Room filling, wide'],['S2','AV desk + online check-in screen BTS']]},
+    {id:'d3',t:'09:00',e:'09:05',title:'Welcome, prayer & introducing Dr. Faith',loc:'Ballroom',key:1,
+     jobs:{L:'Host at the mic, then Dr. Faith\'s first walk to the stage (70-200 from the front).',F:'Prayer: heads bowed, hands clasped (electronic shutter, 85). The room standing and applauding as she walks up.'},
+     set:['70-200 · 85','f/2.8 · 1/250 · silent for prayer','C2 4K24','4300–5200K stage'],
+     shots:[['F','Prayer wide from the back, heads bowed'],['F','Clasped hands close-up','Silent shutter'],['L','Host at the mic'],['L','Dr. Faith\'s first walk-up, from the front','Burst. Her first smile to the room.'],['F','Crowd applauding her entrance']]},
+    {id:'d4',t:'09:05',e:'09:30',title:'Worship',loc:'Ballroom',key:1,
+     jobs:{L:'Worship leader and band from the stage side (70-200). Gimbal slow motion along the side aisle.',F:'Hands raised, tears, eyes closed. Shoot from the back and sides, mostly with the 85.',S2:'High angle wide if there is a balcony or riser.'},
+     set:['70-200 · 85 · gimbal','f/2 · 1/250 · ISO ≤12800','C3 4K60 / 180p','4000–4500K'],
+     shots:[['L','Back wide: stage light + raised hands in silhouette','The signature shot'],['L','Worship leader, medium + tight'],['L','Band details: keys, guitar neck, sticks, mic'],['L','Gimbal slow motion along the side aisle'],['F','Hands raised, close'],['F','Tears and eyes closed (from a distance)'],['F','Side profiles in worship'],['S2','High angle wide']]},
+    {id:'d5',t:'09:30',e:'11:00',title:'Emotional & Spiritual Regulation for Reigning',sub:'Dr. Faith Wokoma · 90 min',loc:'Ballroom',key:1,
+     jobs:{L:'Run the speaker checklist hard for the first 20 minutes, then hunt moments. Three vertical soundbites.',F:'Note-taking, nodding, “aha” faces, tears. Reaction pairs to her strongest lines.',S1:'Write the time and words of every strong quote. Gold for the editors.'},
+     set:['70-200 · 85 · 35','f/2.8 · 1/250 · EC −1/3','C2 4K24','4300–5200K stage'],
+     shots:[['L','Wide: Dr. Faith + full room'],['L','Medium waist up, clean background (YouTube thumbnail)'],['L','Tight face at peak conviction'],['L','Gestures, hands'],['L','Low angle from the front corner'],['L','3 soundbites on video, 15–30 s'],['F','Writing notes: Bibles, journals, tablets','35 f/2, over the shoulder'],['F','Reactions: laughing, nodding, tears'],['F','Hands raised in agreement'],['F','Over-the-shoulder: Dr. Faith seen past the crowd'],['S1','Quote timestamps logged']]},
+    {id:'d6',t:'11:00',e:'12:00',title:'The Spiritual Significance of the Moment: AI and the Future',sub:'Dr. Faith Wokoma · 60 min',loc:'Ballroom',key:1,
+     jobs:{L:'Dr. Faith framed with the slides behind her. A silhouette against the screen is a strong graphic image.',F:'Audience photographing slides with their phones, surprise and curiosity on faces.',S1:'Quote timestamps. This topic is the most shareable of the day (AI + faith).'},
+     set:['70-200 · 28-70','f/2.8 · 1/250','C2 4K24','4300–5200K stage'],
+     shots:[['L','Dr. Faith with the slide on screen behind her'],['L','Silhouette against the bright screen'],['L','3 soundbites on video'],['F','Phones up photographing slides'],['F','Curious, surprised faces'],['F','Room wide']]},
+    {id:'d7',t:'12:00',e:'13:00',title:'Lunch: Taste of Italy & vendor mall',sub:'Crysna moderates Zoom from 1 PM ET · QR code on screen',loc:'Ballroom + Prefunction',
+     jobs:{L:'15 min of food and candids, then offload and pick morning selects with S2.',F:'Fellowship at tables, laughter. Dr. Faith mingling if she\'s out. Vendor sales.',S1:'Mid-day testimonials. Post the 12:15 Story.',S2:'Offload both cards, double backup. Charge batteries.'},
+     set:['85 · 35','f/2 · 1/200','C2 4K24','3600K'],
+     shots:[['L','Buffet styled: 45° and overhead, 85 f/2'],['F','Tables laughing together'],['F','Dr. Faith candid with guests'],['F','Vendor sales, product in hand'],['S1','5 mid-day testimonials'],['S2','Cards backed up twice'],['S1','12:15 Story posted'],['S2','Zoom / online moderation BTS']]},
+    {id:'d8',t:'13:00',e:'14:00',title:'Dr. Jermone Glenn',sub:'Topic TBD · 60 min',loc:'Ballroom',
+     jobs:{L:'Speaker checklist. Portrait before he goes on (ask at lunch).',F:'Reactions to him, note-taking, room wide.',S1:'Quote timestamps.'},
+     set:['70-200 · 85','f/2.8 · 1/250','C2 4K24','4300–5200K stage'],
+     shots:[['L','Portrait before the session'],['L','Wide, medium, tight, gesture'],['L','2 soundbites on video'],['F','Reaction pairs'],['F','Room wide']]},
+    {id:'d9',t:'14:00',e:'15:00',title:'Money & Marriage Q&A',sub:'Dr. Faith & Pastor Soboma · QR questions via Terrell\'s phone',loc:'Ballroom',key:1,
+     jobs:{L:'Couch-panel wide with the audience. Two-shot of the hosts. Their interplay and laughter. Best question and answer on vertical video.',F:'Phones scanning the QR code (QR on screen in the background). Couples in the audience holding hands and laughing. Note-taking on money tips.',S1:'After: 3 reactions on what people are taking home.'},
+     set:['70-200 · 28-70 · 85','f/2.8 · 1/250','C2 4K24','4300–5200K stage'],
+     shots:[['L','Panel wide: couch + audience'],['L','Two-shot: Dr. Faith & Pastor Soboma laughing'],['L','Each host, medium'],['L','Terrell reading a question'],['L','Best question + answer, 30–60 s video'],['F','Phone scanning the QR code, screen in background'],['F','Couples holding hands, laughing'],['F','Notes on money tips'],['S1','3 audience reactions']]},
+    {id:'d10',t:'15:00',e:'16:00',title:'Presbytery instructions & prophetic presbytery',sub:'Shaneka Hallback · then groups in prefunction · vendor mall open',loc:'Ballroom → Prefunction',key:1,
+     jobs:{L:'Shaneka giving instructions, then the ADF table product sales during presbytery. Help S2 start the timelapse.',F:'Presbytery from a distance with the 85 and 70-200. Silent shutter, no flash. Shoot visuals only.',S1:'No interviews right after a personal word. Only later, if someone volunteers.'},
+     set:['70-200 · 85','f/2 · 1/160 · silent','B-roll only, no audio','3600–3900K'],
+     note:'Only shoot presbytery if the organiser has confirmed it is welcome. Never record what is spoken over someone.',
+     shots:[['L','Shaneka giving instructions, wide'],['L','People moving into groups','1/30 for a little motion blur'],['F','Hands on shoulders, laying on of hands'],['F','People writing down their word'],['F','Embraces after prayer'],['L','ADF table: sales, product in hand']]},
+    {id:'d11',t:'15:05',e:'18:05',title:'Room flip for the gala',sub:'3 hours · your reset window',loc:'Ballroom',
+     jobs:{L:'BTS of decorators: purple and navy linens, florals, the cake table going in. Then rest, eat and reset Kelvin for the night.',F:'Same BTS for 30 minutes, then cull the day selects (top 20).',S1:'Post the 15:30 Story. Review the testimonial list against targets.',S2:'Timelapse from a high back corner: 1 frame every 5 s for 3 hours, about 90 s of footage. Charge everything.'},
+     set:['35 · 85 · phone','f/2.8 · 1/125','Timelapse','3600K'],
+     shots:[['S2','Timelapse running (phone or spare body + power bank)'],['L','Decorators building tablescapes'],['L','Linens, florals, chargers going on'],['F','Day selects culled (top 20)'],['S1','15:30 Story posted'],['ALL','All batteries charging, cards swapped'],['ALL','Crew ate']]},
+  ];
+  const GALA=[
+    {id:'g1',t:'17:30',e:'18:30',title:'Sound check: gala details before guests',loc:'Ballroom',key:1,
+     jobs:{L:'Room hero wide on a tripod. Gimbal push-ins through the tables in slow motion. That\'s your gala film opener.',F:'Details: centrepieces, place cards, menus, cake table (left), gift table (right), stage and band setup.',S2:'Help with the tripod. Confirm Kelvin with the grey card under the purple uplighting.'},
+     set:['28-70 · 85 · 35 · gimbal','Tripod f/5.6 · 1/15 · ISO 800','C3 4K60 push-ins','4000–4300K +3 G'],
+     shots:[['L','Empty decorated room, hero wide from the back','Tripod. The closing shot of the gala film too.'],['L','Gimbal push-in through the tables'],['F','Centrepiece close-up, candles lit'],['F','Place setting: menu, napkin, glassware'],['F','Cake table hero','85 f/2, cake sharp, room soft behind'],['F','Gift table'],['L','Band sound check BTS'],['F','Purple & navy colour details (linens, florals)']]},
+    {id:'g2',t:'18:30',e:'19:00',title:'Welcome red carpet: editorial session',sub:'Photos with Dr. Faith · see the Editorial section',loc:'Prefunction',key:1,
+     jobs:{L:'Dr. Faith solo editorial from 18:20, then guests with Dr. Faith (85 + 28-70).',F:'Guests arriving dressed in purple and navy: full-length outfit shots, couples, candid laughter in line. Vertical BTS of the editorial.',S1:'Manage the line, write names in order against shot numbers. Start birthday messages.',S2:'Hold the light or reflector, fix hair and dress. Keep the backdrop clean.'},
+     set:['85 f/2 · 28-70','f/2.5 · 1/200 · flash or LED','C2 vertical BTS','5500K flash / 4300K gel'],
+     shots:[['L','Dr. Faith editorial: full checklist below'],['L','Guests with Dr. Faith: posed + candid each'],['F','Outfit full-lengths of arriving guests'],['F','Couples portraits'],['F','Vertical BTS of the editorial'],['S1','Names logged for tagging'],['S1','Birthday messages started']]},
+    {id:'g3',t:'19:00',e:'19:10',title:'Welcome: Dr. Faith\'s 45th birthday',sub:'Pastor Soboma',loc:'Ballroom',key:1,
+     jobs:{L:'Pastor Soboma at the mic. The first full-room wide of the decorated room with guests.',F:'Dr. Faith at her table reacting: laugh, hand on heart.'},
+     set:['70-200 · 28-70','f/2.8 · 1/200','C2 4K24','4000–4300K +3 G'],
+     shots:[['L','Full decorated room with guests, wide','The money shot of the night'],['L','Pastor Soboma at the mic'],['F','Dr. Faith reacting at her table']]},
+    {id:'g4',t:'19:10',e:'19:45',title:'Dinner & live band',sub:'The Choice Is Yours buffet',loc:'Ballroom',
+     jobs:{L:'Band performers (vocal, sax, keys) close and wide. Eat in a shift.',F:'Table candids: toasts, laughter, conversation. Never shoot people mid-bite. Eat in a shift.',S1:'Birthday messages at tables (10–20 s each).'},
+     set:['35 f/1.8 · 85','f/1.8–2 · 1/160 · ISO ≤12800','C2 4K24','4000–4300K +3 G'],
+     shots:[['L','Band, wide with the room'],['L','Musician close-ups'],['F','Toast / glasses raised'],['F','Table laughing together'],['F','Dr. Faith\'s table candid'],['S1','10+ birthday messages']]},
+    {id:'g5',t:'19:45',e:'20:15',title:'Live worship: presence & prayer',loc:'Ballroom',key:1,
+     jobs:{L:'Purple-light worship wides, worship leader. Gimbal slow motion.',F:'Dr. Faith in worship (huge for her brand), hands raised, faces in the purple light.'},
+     set:['70-200 · 85 · gimbal','f/2 · 1/250 · ISO ≤12800','C3 4K60','4000–4300K +2 G'],
+     shots:[['L','Back wide with purple light + hands'],['L','Worship leader'],['L','Gimbal slow motion'],['F','Dr. Faith worshipping'],['F','Hands and faces in purple light']]},
+    {id:'g6',t:'20:00',e:'20:30',title:'Speeches: 20 years of Pioneers & Dr. Faith',loc:'Ballroom',key:1,
+     jobs:{L:'Every speaker at the mic, honourees, plaques and awards, hugs at the mic.',F:'Stay on Dr. Faith\'s face the whole time: tears, laughter, hand on heart. This pairing is the heart of the gala film.',S1:'Quote timestamps.'},
+     set:['70-200 · 85','f/2.8 · 1/250','C2 4K24 + vertical','4000–4300K +3 G'],
+     shots:[['L','Each speaker at the mic'],['L','Honourees / awards / plaques'],['L','Hugs on stage'],['F','Dr. Faith\'s reactions, continuous'],['F','Room reacting'],['S1','Quote timestamps logged']]},
+    {id:'g7',t:'20:30',e:'20:40',title:'Birthday cake',sub:'Cake table on the left · gift table on the right',loc:'Ballroom',key:1,
+     jobs:{L:'In front of the cake facing Dr. Faith, so the candlelight is on her face. Burst for the blow-out.',F:'Behind her, over her shoulder, to get the whole room singing. Then cake cutting and serving.',S2:'Phone: 4K60 of the candles going out, from a third angle.'},
+     set:['85 · 28-70','f/2 · 1/160 · ISO 3200','C3 4K60','3200–3400K'],
+     shots:[['L','Candlelit face, singing','85 f/2, 3200K'],['L','Blow-out burst'],['F','Room singing, from behind her'],['F','Cake cutting + first slice'],['S2','Slow motion of the candles going out'],['F','Gift table detail']]},
+    {id:'g8',t:'20:40',e:'20:42',title:'Thank you',loc:'Ballroom',
+     jobs:{L:'Dr. Faith at the mic: tight on emotion.',F:'Wide of the room listening.'},
+     set:['70-200 · 28-70','f/2.8 · 1/250','C2 4K24','4000–4300K'],
+     shots:[['L','Dr. Faith thank-you, tight'],['F','Room wide']]},
+    {id:'g9',t:'20:42',e:'21:20',title:'Open dance floor',loc:'Ballroom',key:1,
+     jobs:{L:'Gimbal orbit around Dr. Faith dancing. Low angle on feet and shoes. Slow motion.',F:'Energy: circle of dancers, laughter. Drag shutter with flash if allowed.'},
+     set:['35 · 28-70 · gimbal','Flash: 1/20 rear curtain · or 1/250 ISO 6400–12800','C3 4K60','4000–4300K +2 G'],
+     shots:[['L','Gimbal orbit around Dr. Faith dancing'],['L','Low angle: feet and shoes'],['F','Dance circle wide'],['F','Drag-shutter motion frames'],['F','Laughter close-ups'],['L','Band from the dance floor']]},
+    {id:'g10',t:'21:20',e:'21:45',title:'Closing remarks, final song & departure',loc:'Ballroom',
+     jobs:{L:'Closing prayer wide, final song with hands raised. End on the empty room in purple light.',F:'Goodbyes, hugs, Dr. Faith with family and friends, the gift table full.',S1:'Closing testimonials + last birthday messages. Target 10.'},
+     set:['28-70 · 85','f/2.8 · 1/200','C2 4K24','4000–4300K'],
+     shots:[['L','Closing prayer wide'],['L','Final song, hands raised'],['F','Goodbye hugs'],['F','Dr. Faith with family'],['S1','10 closing testimonials'],['L','Empty room in purple light: final frame']]},
+  ];
+
+  function renderScene(s){
+    const prefix=s.id;
+    const time=s.e?`${s.t}<small>to ${s.e}</small>`:`${s.t}${s.m?`<small>${esc(s.m)}</small>`:''}`;
+    const jobs=Object.entries(s.jobs).map(([r,txt])=>`<div class="job"><span>${chip(r)}</span><span>${esc(txt)}</span></div>`).join('');
+    const [lens,photo,video,k]=s.set;
+    return `<article class="scene ${s.key?'key':''}" data-prefix="${prefix}">
+      <div class="top"><div class="time">${time}</div><div class="ttl"><span class="loc">${esc(s.loc)}</span><h3>${esc(s.title)}${s.key?'<span class="flag must">Priority</span>':''}</h3>${s.sub?`<p class="muted" style="font-size:.88rem">${esc(s.sub)}</p>`:''}</div></div>
+      <div class="jobs">${jobs}</div>
+      <dl class="settings"><div><dt>Lens</dt><dd>${esc(lens)}</dd></div><div><dt>Photo</dt><dd>${esc(photo)}</dd></div><div><dt>Video</dt><dd>${esc(video)}</dd></div><div><dt>Kelvin</dt><dd>${esc(k)}</dd></div></dl>
+      ${s.note?`<div class="note2"><b>Careful:</b> ${esc(s.note)}</div>`:''}
+      ${checklist(prefix,s.shots)}
+    </article>`;
+  }
+  document.getElementById('dayScenes').innerHTML=DAY.map(renderScene).join('');
+  document.getElementById('galaScenes').innerHTML=GALA.map(renderScene).join('');
+
+  /* ---------------- OTHER LISTS ---------------- */
+  const EDITORIAL=[['Dr. Faith solo · 18:20–18:30',[
+    ['L','Full-length hero','28-70 at 50–70mm, camera at hip height, f/4'],
+    ['L','Three-quarter length','85 f/2.2'],
+    ['L','Close portrait, eyes sharp','85 f/2'],
+    ['L','Look back over the shoulder'],
+    ['L','Walking toward camera','Servo, burst'],
+    ['L','Real laugh (S2 makes her laugh)'],
+    ['L','Details: rings, jewellery, hands, shoes, dress texture'],
+    ['L','With Pastor Soboma (if appropriate)'],
+    ['L','With any “45” or birthday décor'],
+    ['L','Vertical versions of the best three looks'],
+    ['F','Vertical BTS of the shoot for a reel'],
+  ]],['Guests · 18:30–19:00',[
+    ['L','Guests with Dr. Faith: posed + candid each'],
+    ['F','Arriving guests: full-length outfits in purple & navy'],
+    ['F','Couples and friend groups'],
+    ['S1','Names logged in order'],
+  ]]];
+  document.getElementById('editorialList').innerHTML=EDITORIAL.map((g,gi)=>group(`ed-${gi}`,g[0],g[1])).join('');
+
+  const SACRED=[['Across both worship sets and presbytery',[
+    ['L','Back wide: stage light + hands raised (day and night)'],
+    ['L','High angle if there is a riser or balcony'],
+    ['L','Worship leader: eyes closed, singing'],
+    ['F','Hands only, close up (anonymous and beautiful)'],
+    ['F','Tears and quiet faces, from a distance'],
+    ['F','Prayer: heads bowed wide'],
+    ['L','Slow motion, 10–20 s of atmosphere (each set)'],
+    ['F','Presbytery: hands on shoulders, embraces after'],
+    ['L F','Day and night shot from different angles'],
+  ]]];
+  document.getElementById('sacredList').innerHTML=SACRED.map((g,gi)=>group(`sac-${gi}`,g[0],g[1])).join('');
+
+  const SPK_ITEMS=[
+    ['L','Portrait before going on (smile, serious, candid)'],
+    ['L','Walk to the stage'],
+    ['L','Wide: speaker + full room'],
+    ['L','Medium waist up, clean background'],
+    ['L','Tight face at a peak moment'],
+    ['L','Hands and gestures'],
+    ['L','Low angle from the front corner'],
+    ['F','Over the shoulder to the crowd'],
+    ['F','Audience reacting to this speaker'],
+    ['L','2–3 soundbites on video'],
+    ['S1','15 s to-camera takeaway after'],
+    ['F','Meeting guests after: hugs, handshakes'],
+  ];
+  const SPEAKERS=['Dr. Faith Wokoma','Dr. Jermone Glenn','Pastor Soboma','Shaneka Hallback'];
+  SPEAKERS.forEach((_,n)=>SPK_ITEMS.forEach((_,i)=>ALL.push(`spk${n}-${i}`)));
+  const tabs=document.getElementById('spkTabs'), lists=document.getElementById('spkLists');
+  tabs.innerHTML=SPEAKERS.map((s,n)=>`<button type="button" role="tab" data-n="${n}" aria-selected="${n===0}">${esc(s)}</button>`).join('');
+  function showSpk(n){
+    tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(+b.dataset.n===n)));
+    lists.innerHTML=group(`spk${n}`,SPEAKERS[n],SPK_ITEMS,false); updateCounts();
+  }
+  tabs.addEventListener('click',e=>{const b=e.target.closest('button'); if(b) showSpk(+b.dataset.n);});
+
+  const QUESTIONS=[
+    ['Arrival','Expectation','Target 8 · 07:30–09:00','',[
+      'What made you say yes to the AskDoctorFaith VIP?','What are you believing God for today?','Where are you in your life or business right now, in one sentence?','Give me one word for how you feel walking in.']],
+    ['After Dr. Faith\'s sessions','Encounter','Target 3 per session','',[
+      'What\'s one thing Dr. Faith said that you can\'t stop thinking about?','How will regulating your emotions change the way you lead?','How has today changed the way you see AI and the future?','Who in your life needs to hear what you just heard?']],
+    ['After Money & Marriage','Take-home','Target 3','',[
+      'What\'s one thing you\'re taking home to your marriage or your finances?','What question did someone ask that you had been wanting to ask?','Where else do you get this kind of access to leaders?']],
+    ['After presbytery','Only if they volunteer','Never right after a personal word','gentle',[
+      'How do you feel right now, after today?','What would you say to someone who has never experienced a prophetic presbytery?']],
+    ['Gala: birthday messages','For Dr. Faith','Target 20 · 10–20 s each, vertical','gala',[
+      'Say happy birthday to Dr. Faith and tell her what she means to you.','What has her ministry meant to you over the years?','Describe Dr. Faith in one word.','What\'s your favourite memory with her?']],
+    ['Gala: 20 years of Pioneers','Legacy','Target 5','gala',[
+      'What does 20 years of Pioneers mean to you?','How has this community changed your life?']],
+    ['Closing','Change','Target 10','gala',[
+      'In one sentence, how was today different from what you expected?','Finish this: “If you weren\'t in the room today, you missed…”','Would you come back next year? Who would you bring?']],
+    ['Speakers & Dr. Faith','Their view','After their session · Dr. Faith at end of night','',[
+      'Why does a room like the VIP matter?','Who is this room for?','One takeaway for someone who missed today.','Dr. Faith: what did tonight mean to you at 45?']],
+  ];
+  document.getElementById('qGrid').innerHTML=QUESTIONS.map(q=>`<article class="qcard ${q[3]}"><span class="when">${esc(q[0])}</span><h3>${esc(q[1])}</h3><ol>${q[4].map(x=>`<li>${esc(x)}</li>`).join('')}</ol><span class="target">${esc(q[2])}</span></article>`).join('');
+
+  const REELS=[
+    ['VIP Day in 40 seconds','30–45 s','Registration → worship → teaching → notes → Q&A → presbytery. The main day recap.'],
+    ['Day to night: the room flip','15–20 s','The 3-hour timelapse into the first gala wide. Very shareable.'],
+    ['Dr. Faith soundbite series','4–6 reels · 20–40 s','Her best lines from both sessions, each paired with a crowd reaction. Lead with the AI session.'],
+    ['Money & Marriage: best question','30–60 s','Question, answer, laughter, couples reacting.'],
+    ['Presence: worship','15–20 s','Slow motion from day and night worship, hands raised, purple light. Licensed or ambient audio.'],
+    ['Red carpet editorial','15–25 s','BTS of the shoot cutting to the final portraits. Post with the birthday carousel.'],
+    ['Happy 45th, Dr. Faith','45–60 s','Supercut of birthday messages ending on the candles going out. A gift to her and very shareable.'],
+    ['20 years of Pioneers','30–60 s','Speeches + Dr. Faith\'s reactions + honourees.'],
+    ['Cake to dance floor','15–20 s','Candles, singing, slow-motion blow-out, the dance floor erupts.'],
+    ['Walking in vs walking out','30–45 s','The same guests at arrival and at close. The strongest sell for next year.'],
+  ];
+  document.getElementById('reelGrid').innerHTML=REELS.map(r=>`<article class="reel"><span class="len">${esc(r[1])}</span><h3>${esc(r[0])}</h3><p class="muted">${esc(r[2])}</p></article>`).join('');
+  document.getElementById('ytList').innerHTML=group('yt-0','YouTube long form',[
+    ['L','VIP Day recap film, 4–6 min','Testimonials as the voiceover'],
+    ['L','Gala film, 3–5 min','Opens on the timelapse and room push-ins, closes on the empty purple room'],
+    ['S2','Full Dr. Faith sessions + Money & Marriage','From the AV recording and desk audio'],
+    ['L','Shorts cut from the reels'],
+  ]);
+
+  const SEGMENTS=['DAY-SETUP','DAY-REG','DAY-VENDOR','DAY-DOORS','DAY-WELCOME','DAY-WORSHIP','DAY-FAITH-S1','DAY-FAITH-AI','DAY-LUNCH','DAY-GLENN','DAY-MONEY-MARRIAGE','DAY-PRESBYTERY','DAY-FLIP','GALA-DETAILS','GALA-EDITORIAL','GALA-REDCARPET','GALA-WELCOME','GALA-DINNER','GALA-WORSHIP','GALA-SPEECHES','GALA-CAKE','GALA-DANCE','GALA-CLOSING','TEST-DAY','TEST-GALA','BDAY-MESSAGES','BTS'];
+  document.getElementById('segList').innerHTML=SEGMENTS.map(s=>`<code>${s}</code>`).join('');
+
+  document.getElementById('wrapList').innerHTML=group('wrap-0','Sign-off',[
+    ['L','Dr. Faith editorial: every look on the list'],
+    ['L','Every speaker has wide, medium, tight + soundbites'],
+    ['F','Reaction pairs for every session and the speeches'],
+    ['F','Note-taking, hands raised, questions, prayer all covered'],
+    ['L','Full-room wides for every session and the gala'],
+    ['S2','Timelapse saved'],
+    ['S1','Testimonial targets hit (day + gala + 20 birthday messages)'],
+    ['S1','Names and consent logged'],
+    ['S2','AV recording + audio collected from the vendor'],
+    ['ALL','All cards backed up twice (drive + cloud)'],
+    ['ALL','Files sorted into segments'],
+    ['ALL','Gear packed, batteries charging for tomorrow'],
+  ]);
+
+  /* ---------------- WHO AM I ---------------- */
+  const NAME_KEY='vip-adf-name';
+  let myName=''; try{myName=localStorage.getItem(NAME_KEY)||'';}catch(e){}
+  const whoSel=document.getElementById('whoSel'), whoOther=document.getElementById('whoOther'), whoWrap=document.getElementById('whoWrap');
+  const PRESET=['Francis','Annie','Support 1','Support 2'];
+  if(myName){ if(PRESET.includes(myName)) whoSel.value=myName; else {whoSel.value='__other'; whoOther.hidden=false; whoOther.value=myName;} }
+  function setName(n){ myName=n.trim().slice(0,24); try{localStorage.setItem(NAME_KEY,myName);}catch(e){} whoWrap.classList.toggle('need',!myName); updateCounts(); renderInspo(); }
+  whoSel.addEventListener('change',()=>{ if(whoSel.value==='__other'){whoOther.hidden=false; whoOther.focus(); setName(whoOther.value);} else {whoOther.hidden=true; setName(whoSel.value);} });
+  whoOther.addEventListener('input',()=>setName(whoOther.value));
+  whoWrap.classList.toggle('need',!myName);
+
+  /* ---------------- SYNC (Supabase) ---------------- */
+  const CFG=window.VIP_CONFIG||{};
+  const statusEl=document.getElementById('syncStatus');
+  const setStatus=(t,st)=>{statusEl.textContent=t; statusEl.dataset.state=st;};
+  const QKEY='vip-adf-queue';
+  let queue=[]; try{queue=JSON.parse(localStorage.getItem(QKEY)||'[]')||[];}catch(e){queue=[];}
+  const saveQ=()=>{try{localStorage.setItem(QKEY,JSON.stringify(queue));}catch(e){}};
+  let sb=null, live=false, server=null;
+
+  function updateCounts(){
+    document.querySelectorAll('[data-count]').forEach(el=>{
+      const p=el.dataset.count; const boxes=document.querySelectorAll(`.group[data-prefix="${p}"] input`);
+      el.textContent=`${[...boxes].filter(b=>b.checked).length}/${boxes.length}`;
+    });
+    const done=ALL.filter(id=>ticks[id]).length;
+    document.getElementById('progText').textContent=`${done} of ${ALL.length} captured`;
+    document.getElementById('progBar').style.width=(ALL.length?done/ALL.length*100:0)+'%';
+    renderBy();
+  }
+  function renderBy(){
+    document.querySelectorAll('.by[data-by]').forEach(e=>{
+      const t=ticks[e.dataset.by];
+      e.textContent=(t&&t.by)?'· '+(t.by===myName?'you':t.by):'';
+    });
+  }
+  function applyTicks(){
+    document.querySelectorAll('ul.check input[data-id]').forEach(b=>{b.checked=!!ticks[b.dataset.id];});
+    updateCounts();
+  }
+  function rebuild(){
+    if(!server) return;
+    const next={};
+    Object.values(server).forEach(r=>{ if(r.done) next[r.id]={by:r.who||'crew'}; });
+    queue.forEach(q=>{ if(q.on) next[q.id]={by:q.by}; else delete next[q.id]; });
+    ticks=next;
+    state={}; Object.keys(ticks).forEach(k=>state[k]=true); save();
+    applyTicks();
+  }
+  showSpk(0);
+
+  document.addEventListener('change',e=>{
+    const id=e.target.dataset&&e.target.dataset.id; if(!id) return;
+    const on=e.target.checked, by=myName||'crew';
+    if(on){ticks[id]={by};state[id]=true;}else{delete ticks[id];delete state[id];}
+    save(); updateCounts();
+    if(sb){ queue=queue.filter(q=>q.id!==id); queue.push({id,on,by,at:new Date().toISOString()}); saveQ(); flush(); }
+  });
+
+  let flushing=false;
+  async function flush(){
+    if(!sb||flushing||!queue.length) return;
+    flushing=true;
+    while(queue.length){
+      const q=queue[0]; let r;
+      try{ r=q.on?await sb.from('ticks').upsert({id:q.id,done:true,who:q.by,at:q.at}):await sb.from('ticks').delete().eq('id',q.id); }
+      catch(err){ r={error:err}; }
+      if(r.error){ setStatus(`Offline · ${queue.length} tick${queue.length>1?'s':''} waiting to sync`,'warn'); break; }
+      queue.shift(); saveQ();
+    }
+    flushing=false;
+    if(!queue.length&&live) setStatus('Live · synced with the crew','live');
+  }
+
+  async function loadTicks(){
+    const {data,error}=await sb.from('ticks').select('id,done,who');
+    if(error){ setStatus('Can\'t reach the crew checklist. Your ticks are saved here and will sync.','warn'); return; }
+    server={}; data.forEach(r=>{server[r.id]=r;}); rebuild();
+  }
+
+  /* ---------------- INSPO BOARD ---------------- */
+  const BUCKET='inspo';
+  const SCENES=[...DAY,...GALA].map(x=>({id:x.id,label:`${x.t} · ${x.title}`}));
+  const sceneLabel=id=>(SCENES.find(x=>x.id===id)||{label:'Any time'}).label;
+  const sel=document.getElementById('inScene');
+  sel.innerHTML='<option value="general">Any time</option><optgroup label="Day session">'+DAY.map(x=>`<option value="${x.id}">${esc(x.t+' · '+x.title)}</option>`).join('')+'</optgroup><optgroup label="Gala">'+GALA.map(x=>`<option value="${x.id}">${esc(x.t+' · '+x.title)}</option>`).join('')+'</optgroup>';
+  const form=document.getElementById('inspoForm'), msg=document.getElementById('inMsg'), btn=document.getElementById('inSubmit');
+  const grid=document.getElementById('inspoGrid'), filterEl=document.getElementById('inspoFilter');
+  let inspo=[], filter='all', inspoReady=false;
+  const FILTERS=[['all','All'],['shot','Shots'],['reel','Reels'],['todo','To try'],['tried','Tried']];
+  const say=t=>{msg.textContent=t;};
+  const setFormEnabled=on=>form.querySelectorAll('input,select,textarea,button').forEach(el=>{el.disabled=!on;});
+  const match=(i,k)=>k==='all'||(k==='todo'?!i.tried:k==='tried'?i.tried:i.kind===k);
+
+  function renderFilters(){
+    filterEl.innerHTML=FILTERS.map(([k,l])=>`<button type="button" role="tab" data-f="${k}" aria-selected="${k===filter}">${l} ${inspoReady?inspo.filter(i=>match(i,k)).length:''}</button>`).join('');
+  }
+  filterEl.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; filter=b.dataset.f; renderInspo();});
+
+  function renderInspo(){
+    renderFilters();
+    grid.replaceChildren();
+    if(!inspoReady) return;
+    const list=inspo.filter(i=>match(i,filter));
+    if(!list.length){
+      const d=document.createElement('div'); d.className='empty';
+      d.textContent=inspo.length?'Nothing in this filter.':(sb?'Nothing here yet. Add the first shot or reel above.':'Connect the app to Supabase (see config.js) to use the shared board.');
+      grid.append(d); return;
+    }
+    list.forEach(it=>{
+      const card=document.createElement('article'); card.className='icard';
+      const link=(typeof it.link==='string'&&/^https?:\/\//i.test(it.link))?it.link:null;
+      if(it.file_path&&sb){
+        const src=sb.storage.from(BUCKET).getPublicUrl(it.file_path).data.publicUrl;
+        let m;
+        if(String(it.content_type||'').startsWith('video/')){m=document.createElement('video');m.controls=true;m.muted=true;m.playsInline=true;m.preload='metadata';}
+        else{m=document.createElement('img');m.alt=String(it.title||'Inspo');m.loading='lazy';}
+        m.className='media'; m.src=src; card.append(m);
+      }else if(link){
+        const a=document.createElement('a'); a.className='linkonly'; a.href=link; a.target='_blank'; a.rel='noopener noreferrer';
+        const bb=document.createElement('b'); bb.textContent=it.kind==='reel'?'Watch the reel ↗':'Open the reference ↗';
+        const sp=document.createElement('span'); try{sp.textContent=new URL(link).hostname.replace(/^www\./,'');}catch(e){sp.textContent='link';}
+        a.append(bb,sp); card.append(a);
+      }
+      const body=document.createElement('div'); body.className='body';
+      const tags=document.createElement('div'); tags.className='tags';
+      const t1=document.createElement('span'); t1.className='tag2 '+(it.kind==='reel'?'reel':'shot'); t1.textContent=it.kind==='reel'?'Reel':'Shot';
+      const t2=document.createElement('span'); t2.className='tag2'; t2.textContent=sceneLabel(it.scene);
+      tags.append(t1,t2);
+      if(it.tried){const t3=document.createElement('span'); t3.className='tag2 done'; t3.textContent='Tried'; tags.append(t3);}
+      const h=document.createElement('h3'); h.textContent=String(it.title||'Untitled');
+      body.append(tags,h);
+      if(it.note){const p=document.createElement('p'); p.textContent=String(it.note); body.append(p);}
+      if(link&&it.file_path){const a=document.createElement('a'); a.className='ref'; a.href=link; a.target='_blank'; a.rel='noopener noreferrer'; a.textContent='Reference link ↗'; body.append(a);}
+      const foot=document.createElement('div'); foot.className='foot';
+      const who=document.createElement('span'); who.className='who2';
+      who.textContent='Added by '+(it.who&&it.who===myName?'you':(it.who||'crew'));
+      const acts=document.createElement('div'); acts.className='acts';
+      if(sb){
+        const tb=document.createElement('button'); tb.type='button'; tb.className='btn ghost'+(it.tried?' on':''); tb.textContent=it.tried?'Tried ✓':'Mark tried';
+        tb.addEventListener('click',async()=>{tb.disabled=true; const {error}=await sb.from('inspo').update({tried:!it.tried}).eq('id',it.id); if(error) say('Could not update that card.'); else {it.tried=!it.tried; renderInspo();} tb.disabled=false;});
+        const del=document.createElement('button'); del.type='button'; del.className='btn ghost danger'; del.textContent='Remove';
+        del.addEventListener('click',()=>{
+          acts.replaceChildren();
+          const yes=document.createElement('button'); yes.type='button'; yes.className='btn ghost danger'; yes.textContent='Remove for everyone';
+          const no=document.createElement('button'); no.type='button'; no.className='btn ghost'; no.textContent='Cancel';
+          no.addEventListener('click',renderInspo);
+          yes.addEventListener('click',async()=>{
+            yes.disabled=true;
+            const {error}=await sb.from('inspo').delete().eq('id',it.id);
+            if(error){say('Could not remove that card.'); renderInspo(); return;}
+            if(it.file_path) await sb.storage.from(BUCKET).remove([it.file_path]);
+            inspo=inspo.filter(x=>x.id!==it.id); renderInspo();
+          });
+          acts.append(yes,no);
+        });
+        acts.append(tb,del);
+      }
+      foot.append(who,acts); body.append(foot); card.append(body); grid.append(card);
+    });
+  }
+
+  async function loadInspo(){
+    const {data,error}=await sb.from('inspo').select('*').order('at',{ascending:false});
+    if(error){ say('Can\'t reach the board right now.'); }
+    else inspo=data;
+    inspoReady=true; renderInspo();
+  }
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!sb) return;
+    if(!myName){say('Pick your name at the top first.'); whoSel.focus(); return;}
+    const title=document.getElementById('inTitle').value.trim();
+    if(!title){say('Give it a title first.'); document.getElementById('inTitle').focus(); return;}
+    const link=document.getElementById('inLink').value.trim();
+    if(link&&!/^https?:\/\/\S+$/i.test(link)){say('Links need to start with https://'); return;}
+    const kind=document.getElementById('inKindReel').checked?'reel':'shot';
+    const note=document.getElementById('inNote').value.trim().slice(0,400);
+    const scene=sel.value;
+    const f=document.getElementById('inFile').files[0];
+    btn.disabled=true;
+    let file_path=null, content_type=null;
+    if(f){
+      if(f.size>50*1024*1024){say('That file is over 50 MB. Trim it or paste a link.'); btn.disabled=false; return;}
+      if(!/^(image|video)\//.test(f.type)){say('Only photos and videos can be uploaded.'); btn.disabled=false; return;}
+      say('Uploading…');
+      const ext=(f.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'bin';
+      const path=`${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+      const {error}=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type,upsert:false});
+      if(error){say('Upload failed. Try again or paste a link.'); btn.disabled=false; return;}
+      file_path=path; content_type=f.type;
+    }
+    say('Adding…');
+    const {error}=await sb.from('inspo').insert({kind,title:title.slice(0,80),note:note||null,link:link||null,scene,file_path,content_type,who:myName,tried:false});
+    if(error){
+      if(file_path) await sb.storage.from(BUCKET).remove([file_path]);
+      say('Could not add it. Try again.');
+    }else{
+      form.reset(); document.getElementById('inKindShot').checked=true; say('Added to the board.');
+      loadInspo();
+    }
+    btn.disabled=false;
+  });
+
+  /* ---------------- CONNECT ---------------- */
+  function connect(){
+    if(!CFG.supabaseUrl||!CFG.supabaseAnonKey||!window.supabase){
+      setStatus('Not connected yet: ticks save on this phone only (add Supabase keys in config.js)','local');
+      setFormEnabled(false); say('The shared board needs the Supabase keys in config.js.');
+      inspoReady=true; renderInspo(); return;
+    }
+    sb=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+    setStatus('Connecting to the crew…','wait');
+    sb.channel('vip-live')
+      .on('postgres_changes',{event:'*',schema:'public',table:'ticks'},p=>{
+        if(!server) return;
+        if(p.eventType==='DELETE'){ if(p.old&&p.old.id) delete server[p.old.id]; }
+        else if(p.new&&p.new.id) server[p.new.id]=p.new;
+        rebuild();
+      })
+      .on('postgres_changes',{event:'*',schema:'public',table:'inspo'},()=>loadInspo())
+      .subscribe(st=>{
+        if(st==='SUBSCRIBED'){ live=true; loadTicks().then(()=>{ if(!queue.length) setStatus('Live · synced with the crew','live'); flush(); }); loadInspo(); }
+        else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ live=false; setStatus('Reconnecting… your ticks are saved here and will sync','warn'); }
+      });
+    window.addEventListener('online',()=>{flush(); loadTicks(); loadInspo();});
+    document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'){ flush(); loadTicks(); loadInspo(); } });
+    setInterval(flush,15000);
+  }
+  connect();
+  if('serviceWorker' in navigator && location.protocol.startsWith('http')){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+})();
+</script>
+</body>
+</html>
