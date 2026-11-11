@@ -846,20 +846,25 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
   let flushing=false;
   async function flush(){
     if(!sb||flushing||!queue.length) return;
-    flushing=true;
+    flushing=true; let sent=0;
     while(queue.length){
       const q=queue[0]; let r;
       try{ r=q.on?await sb.from('ticks').upsert({id:q.id,done:true,who:q.by,at:q.at}):await sb.from('ticks').delete().eq('id',q.id); }
       catch(err){ r={error:err}; }
       if(r.error){ setStatus(`Offline · ${queue.length} tick${queue.length>1?'s':''} waiting to sync`,'warn'); break; }
-      queue.shift(); saveQ();
+      if(server){ if(q.on) server[q.id]={id:q.id,done:true,who:q.by}; else delete server[q.id]; }
+      queue.shift(); saveQ(); loadSeq++; sent++; // a read that started before this write is now stale
     }
     flushing=false;
+    if(sent) loadTicks();
     if(!queue.length&&live) setStatus('Live · synced with the crew','live');
   }
 
+  let loadSeq=0;
   async function loadTicks(){
+    const seq=++loadSeq;
     const {data,error}=await sb.from('ticks').select('id,done,who');
+    if(seq!==loadSeq) return; // a newer load or a write happened meanwhile; don't overwrite with stale rows
     if(error){ setStatus('Can\'t reach the crew checklist. Your ticks are saved here and will sync.','warn'); return; }
     server={}; data.forEach(r=>{server[r.id]=r;}); rebuild();
   }
