@@ -176,6 +176,26 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
 }
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 
+/* collapsible sections + scenes */
+details.fold > summary{list-style:none;cursor:pointer;position:relative;padding-right:44px}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::after{content:"";position:absolute;right:6px;top:50%;width:26px;height:26px;margin-top:-13px;border-radius:50%;border:1px solid var(--line);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237d6aa3' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center/14px no-repeat;transition:transform .2s}
+details.fold[open] > summary::after{transform:rotate(180deg)}
+details.fold > summary:focus-visible{outline:2px solid var(--purple);outline-offset:4px;border-radius:10px}
+section > details.fold{display:grid}
+section > details.fold > summary > .intro{display:grid;gap:8px;max-width:68ch}
+section > details.fold > .sbody{display:grid;gap:18px;padding-top:18px}
+section > details.fold:not([open]) > summary .muted{display:none}
+section > details.fold > summary .daybar{padding-right:0}
+.scene > summary.top{padding-right:52px}
+.scene > summary.top::after{right:14px;top:22px;margin-top:0}
+.scene:not([open]) > summary.top{padding-bottom:16px}
+.cnt{font:500 .7rem/1 var(--mono);color:var(--muted);margin-left:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cnt.full{color:var(--ok)}
+.foldbar{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem}
+.scene.now{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok) inset}
+.nowtag{display:inline-block;font:500 .66rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:5px;background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);margin-left:6px;vertical-align:middle}
+
 /* sync + inspo */
 .sync{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
 .sync::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
@@ -246,6 +266,7 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
   <div class="progress">
     <div class="progress-row"><span id="progText">0 of 0 captured</span><span class="sync" id="syncStatus" data-state="local">Connecting…</span></div>
     <div class="bar"><i id="progBar"></i></div>
+    <div class="foldbar"><button type="button" class="linkbtn" id="openAll">Expand all</button><button type="button" class="linkbtn" id="closeAll">Collapse all</button></div>
   </div>
   <div class="whoami" id="whoWrap"><label for="whoSel">You are</label><select id="whoSel"><option value="">Choose your name…</option><option>Francis</option><option>Annie</option><option>Amari</option><option>Support 2</option><option value="__other">Someone else…</option></select><input id="whoOther" type="text" maxlength="24" placeholder="Your name" hidden autocomplete="off"></div>
 </header>
@@ -661,13 +682,13 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
     const time=s.e?`${s.t}<small>to ${s.e}</small>`:`${s.t}${s.m?`<small>${esc(s.m)}</small>`:''}`;
     const jobs=Object.entries(s.jobs).map(([r,txt])=>`<div class="job"><span>${chip(r)}</span><span>${esc(txt)}</span></div>`).join('');
     const [lens,photo,video,k]=s.set;
-    return `<article class="scene ${s.key?'key':''}" data-prefix="${prefix}">
-      <div class="top"><div class="time">${time}</div><div class="ttl"><span class="loc">${esc(s.loc)}</span><h3>${esc(s.title)}${s.key?'<span class="flag must">Priority</span>':''}</h3>${s.sub?`<p class="muted" style="font-size:.88rem">${esc(s.sub)}</p>`:''}</div></div>
+    return `<details class="scene fold ${s.key?'key':''}" data-prefix="${prefix}" data-fold="${prefix}" data-t="${s.t}" data-e="${s.e||''}">
+      <summary class="top"><div class="time">${time}</div><div class="ttl"><span class="loc">${esc(s.loc)}<small class="cnt" data-count="${prefix}"></small></span><h3>${esc(s.title)}${s.key?'<span class="flag must">Priority</span>':''}</h3>${s.sub?`<p class="muted" style="font-size:.88rem">${esc(s.sub)}</p>`:''}</div></summary>
       <div class="jobs">${jobs}</div>
       <dl class="settings"><div><dt>Lens</dt><dd>${esc(lens)}</dd></div><div><dt>Photo</dt><dd>${esc(photo)}</dd></div><div><dt>Video</dt><dd>${esc(video)}</dd></div><div><dt>Kelvin</dt><dd>${esc(k)}</dd></div></dl>
       ${s.note?`<div class="note2"><b>Careful:</b> ${esc(s.note)}</div>`:''}
       ${checklist(prefix,s.shots)}
-    </article>`;
+    </details>`;
   }
   document.getElementById('dayScenes').innerHTML=DAY.map(renderScene).join('');
   document.getElementById('galaScenes').innerHTML=GALA.map(renderScene).join('');
@@ -791,6 +812,41 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
     ['S2','All Stories posted (12:15, 15:30, 19:15)'],
   ]);
 
+  /* ---------------- FOLDING ---------------- */
+  (function(){
+    const FKEY='vip-adf-fold';
+    let fs={}; try{fs=JSON.parse(localStorage.getItem(FKEY)||'{}')||{};}catch(e){fs={};}
+    const keep=()=>{try{localStorage.setItem(FKEY,JSON.stringify(fs));}catch(e){}};
+    const OPEN_BY_DEFAULT={day:1,gala:1};
+    document.querySelectorAll('.wrap > section[id]').forEach(sec=>{
+      const head=sec.querySelector(':scope > .intro, :scope > .daybar'); if(!head) return;
+      const d=document.createElement('details'); d.className='fold'; d.dataset.fold='sec-'+sec.id;
+      const sum=document.createElement('summary'); const body=document.createElement('div'); body.className='sbody';
+      [...sec.children].forEach(ch=>{ (ch===head?sum:body).appendChild(ch); });
+      d.append(sum,body); sec.appendChild(d);
+      if(OPEN_BY_DEFAULT[sec.id]) d.open=true;
+    });
+    // the scene happening now (event day only) opens and gets a tag
+    const ev=new Date(2026,10,12), now=new Date();
+    if(now.toDateString()===ev.toDateString()){
+      const mins=now.getHours()*60+now.getMinutes(), m=t=>{const [h,mm]=t.split(':').map(Number);return h*60+mm;};
+      let cur=null;
+      document.querySelectorAll('details.scene').forEach(sc=>{ if(m(sc.dataset.t)<=mins) cur=sc; });
+      if(cur){ cur.classList.add('now'); cur.open=true; const h=cur.querySelector('h3'); if(h) h.insertAdjacentHTML('beforeend','<span class="nowtag">Now</span>'); }
+    }
+    const all=()=>document.querySelectorAll('details.fold');
+    all().forEach(d=>{
+      const k=d.dataset.fold; if(k in fs) d.open=!!fs[k];
+      d.addEventListener('toggle',()=>{ fs[k]=d.open; keep(); });
+    });
+    document.getElementById('openAll').addEventListener('click',()=>all().forEach(d=>d.open=true));
+    document.getElementById('closeAll').addEventListener('click',()=>all().forEach(d=>d.open=false));
+    // tapping a chip opens that section
+    document.querySelectorAll('nav.chips a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
+      const d=document.querySelector(a.getAttribute('href')+' > details.fold'); if(d) d.open=true;
+    }));
+  })();
+
   /* ---------------- WHO AM I ---------------- */
   const NAME_KEY='vip-adf-name';
   let myName=''; try{myName=localStorage.getItem(NAME_KEY)||'';}catch(e){}
@@ -813,8 +869,9 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.85rem}
 
   function updateCounts(){
     document.querySelectorAll('[data-count]').forEach(el=>{
-      const p=el.dataset.count; const boxes=document.querySelectorAll(`.group[data-prefix="${p}"] input`);
-      el.textContent=`${[...boxes].filter(b=>b.checked).length}/${boxes.length}`;
+      const p=el.dataset.count; const boxes=document.querySelectorAll(`[data-prefix="${p}"] input[type=checkbox]`);
+      const n=[...boxes].filter(b=>b.checked).length;
+      el.textContent=`${n}/${boxes.length}`; el.classList.toggle('full',boxes.length>0&&n===boxes.length);
     });
     const done=ALL.filter(id=>ticks[id]).length;
     document.getElementById('progText').textContent=`${done} of ${ALL.length} captured`;

@@ -1,5 +1,5 @@
 // Offline shell: the app opens without signal; live data always comes from the network.
-const CACHE = 'vip-capture-v3';
+const CACHE = 'vip-capture-v4';
 const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'];
 
